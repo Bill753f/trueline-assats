@@ -6,6 +6,7 @@
     <title>TRUELINE | Creative Engine v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap" rel="stylesheet">
     <style>
         :root { --accent: #3b82f6; --neon: #60a5fa; }
         body { background: #000000; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -13,20 +14,59 @@
         /* Premium Sidebar */
         .sidebar { background: #050505; border-right: 1px solid rgba(255,255,255,0.03); width: 280px; }
 
-        /* Gahar Logo Button */
+        /* =========================================================
+           Rombakan Logo Box - Anime Premium Style (Sistem Tidak Berubah)
+           ========================================================= */
         .logo-box {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1), inset 0 1px 1px rgba(255,255,255,0.1);
+            /* Background gradasi ala langit malam anime fantasy */
+            background: linear-gradient(135deg, #1a103f 0%, #050505 50%, #1e3a8a 100%);
+            /* Double border: tipis di luar, tebal menyala di dalam */
+            border: 1px solid rgba(251, 191, 36, 0.5); /* Warna Emas Pudar */
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), /* Glow Biru luar */
+                        inset 0 0 10px rgba(251, 191, 36, 0.3); /* Glow Emas dalam */
             position: relative;
             overflow: hidden;
+            transition: 0.5s ease;
         }
+
+        /* Efek Kilau Emas Berputar (Lama/Kecepatan disesuaikan agar elegan) */
         .logo-box::after {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.4), transparent 60%);
-            animation: rotate 4s linear infinite;
+            background: conic-gradient(from 0deg, transparent, rgba(251, 191, 36, 0.6), transparent 40%);
+            animation: rotateAnime 6s linear infinite; /* Dipelambat jadi 6 detik agar lebih mewah */
         }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Partikel Emas Kecil (Glitter effect di dalam kotak) */
+        .logo-box::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(rgba(251, 191, 36, 0.8) 1px, transparent 1px);
+            background-size: 10px 10px;
+            opacity: 0.3;
+            animation: glitter 3s ease infinite;
+        }
+
+        @keyframes rotateAnime { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes glitter { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.4; } }
+
+        /* Styling Huruf T - Gaya Anime Gothic */
+        .anime-t {
+            font-family: 'New Tegomin', serif; /* Font gaya Jepang yang tajam */
+            font-weight: 900;
+            font-style: italic;
+            /* Gradasi Silver Metallic */
+            background: linear-gradient(180deg, #ffffff 0%, #9ca3af 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* Drop shadow agar huruf T menonjol luar kotak */
+            filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.8));
+            transform: scale(1.1) rotate(-5deg); /* Sedikit dimiringkan agar dinamis */
+        }
+
+        .logo-box:hover {
+            border-color: rgba(251, 191, 36, 1);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), inset 0 0 15px rgba(251, 191, 36, 0.5);
+        }
+        /* ========================================================= */
 
         /* CapCut Style Glass Cards */
         .glass-card { 
@@ -70,11 +110,11 @@
         <div class="p-8">
             <div class="flex items-center space-x-4 mb-10 group cursor-pointer">
                 <div class="logo-box w-12 h-12 rounded-xl flex items-center justify-center z-10">
-                    <span class="text-white font-black italic text-xl relative z-20 group-hover:scale-110 transition">T</span>
+                    <span class="anime-t text-2xl relative z-20 group-hover:scale-110 transition">T</span>
                 </div>
                 <div>
-                    <h1 class="text-lg font-black tracking-tighter uppercase leading-none">Trueline</h1>
-                    <p class="text-[8px] font-bold text-blue-500 tracking-[0.3em] uppercase mt-1">Creative OS</p>
+                    <h1 class="text-lg font-black tracking-tighter uppercase leading-none text-white">Trueline</h1>
+                    <p class="text-[8px] font-bold text-yellow-400 tracking-[0.3em] uppercase mt-1">Creative OS</p>
                 </div>
             </div>
             
