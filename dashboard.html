@@ -7,71 +7,54 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background: radial-gradient(circle at top right, #0f172a, #000000); 
-            color: #f8fafc; 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-        }
+        body { background: radial-gradient(circle at top right, #0f172a, #000000); color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
         
-        /* Sidebar Glassmorphism */
-        .sidebar { 
-            background: rgba(0, 0, 0, 0.6); 
-            backdrop-filter: blur(20px); 
-            border-right: 1px solid rgba(255,255,255,0.05); 
-            width: 280px; 
-        }
+        .sidebar { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.05); width: 280px; }
 
-        /* Glass Cards (Lebih Bagus dari CapCut) */
+        /* Glass Cards Premium */
         .glass-card { 
             background: rgba(255, 255, 255, 0.03); 
             border: 1px solid rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(12px);
-            border-radius: 24px;
+            border-radius: 20px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
             overflow: hidden;
         }
         .glass-card:hover { 
             background: rgba(255, 255, 255, 0.07); 
             border-color: #3b82f6;
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px -15px rgba(59, 130, 246, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(59, 130, 246, 0.4);
         }
 
-        /* Efek Kilau pada Card */
-        .glass-card::before {
-            content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: 0.5s;
-        }
-        .glass-card:hover::before { left: 100%; }
-
-        /* Tombol 3D Premium */
+        /* Tombol 3D */
         .btn-3d {
             background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4), inset 0 1px 1px rgba(255,255,255,0.3);
+            box-shadow: 0 8px 15px -5px rgba(37, 99, 235, 0.4), inset 0 1px 1px rgba(255,255,255,0.3);
             border: 1px solid rgba(255,255,255,0.1);
             transition: 0.3s;
         }
-        .btn-3d:hover { transform: scale(1.05); box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.6); }
+        .btn-3d:hover { transform: scale(1.02); box-shadow: 0 12px 25px -5px rgba(37, 99, 235, 0.6); }
 
-        /* Navigation Links */
-        .nav-link { transition: 0.3s; border: 1px solid transparent; }
-        .nav-link.active { 
-            background: rgba(59, 130, 246, 0.1); 
-            color: #3b82f6; 
-            border-color: rgba(59, 130, 246, 0.2); 
+        /* CapCut Style Tag */
+        .tag-premium {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            color: black;
+            font-size: 8px;
             font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
         }
 
-        /* Content Section Animation */
+        .nav-link.active { background: rgba(59, 130, 246, 0.1); color: #3b82f6; font-weight: 800; border-right: 3px solid #3b82f6; }
+
         .content-section { display: none; }
         .content-section.active { display: block; animation: slideUp 0.5s ease forwards; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        /* Image Placeholder Style */
+        .img-placeholder { background-color: #1a1a1a; background-position: center; background-size: cover; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden text-[13px]">
@@ -79,119 +62,133 @@
     <aside class="sidebar flex flex-col shrink-0">
         <div class="p-8">
             <h1 class="text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">TRUELINE</h1>
-            <p class="text-[9px] font-bold text-gray-500 tracking-[0.3em] mt-1">FOUNDER EDITION</p>
+            <p class="text-[9px] font-bold text-gray-600 tracking-[0.3em] mt-1 uppercase">Creative OS</p>
         </div>
         
-        <nav class="flex-1 px-4 space-y-2">
-            <button onclick="showPage('home', this)" class="nav-link active w-full flex items-center space-x-4 px-5 py-3.5 rounded-2xl">
-                <span class="text-xl">🏠</span> <span class="font-bold">Studio Home</span>
+        <nav class="flex-1 px-4 space-y-1">
+            <button onclick="showPage('home', this)" class="nav-link active w-full flex items-center space-x-4 px-5 py-3 rounded-xl transition">
+                <span>🏠</span> <span class="font-bold text-xs uppercase tracking-wider">Home</span>
             </button>
-            <button onclick="showPage('video', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3.5 rounded-2xl text-gray-500 hover:bg-white/5 hover:text-white transition">
-                <span class="text-xl">🎬</span> <span class="font-bold">Video Editor</span>
+            <button onclick="showPage('video', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3 rounded-xl text-gray-500 hover:bg-white/5 transition">
+                <span>🎬</span> <span class="font-bold text-xs uppercase tracking-wider">Video Templates</span>
             </button>
-            <button onclick="showPage('canva', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3.5 rounded-2xl text-gray-500 hover:bg-white/5 hover:text-white transition">
-                <span class="text-xl">🎨</span> <span class="font-bold">Canva Assets</span>
+            <button onclick="showPage('canva', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3 rounded-xl text-gray-500 hover:bg-white/5 transition">
+                <span>🎨</span> <span class="font-bold text-xs uppercase tracking-wider">Canva Designs</span>
             </button>
-            <button onclick="showPage('ppt', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3.5 rounded-2xl text-gray-500 hover:bg-white/5 hover:text-white transition">
-                <span class="text-xl">📊</span> <span class="font-bold">PowerPoint Pro</span>
+            <button onclick="showPage('ppt', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3 rounded-xl text-gray-500 hover:bg-white/5 transition">
+                <span>📊</span> <span class="font-bold text-xs uppercase tracking-wider">PPT Pitch Deck</span>
+            </button>
+            <button onclick="showPage('ai', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3 rounded-xl text-gray-500 hover:bg-white/5 transition">
+                <span>🤖</span> <span class="font-bold text-xs uppercase tracking-wider">AI Generated</span>
             </button>
         </nav>
 
-        <div class="p-6">
-            <div class="bg-white/5 p-5 rounded-3xl border border-white/10">
-                <p class="text-[10px] font-black text-blue-400 uppercase mb-3 italic">Cloud Storage</p>
-                <div class="w-full h-1.5 bg-gray-800 rounded-full mb-2 overflow-hidden">
-                    <div class="w-1/3 h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-                </div>
-                <div class="flex justify-between text-[9px] font-bold text-gray-500 uppercase">
-                    <span>3.2 GB Used</span>
-                    <span>10 GB</span>
-                </div>
-            </div>
+        <div class="p-6 mt-auto border-t border-white/5">
+            <button class="w-full py-3 rounded-xl bg-white/5 text-[10px] font-black tracking-widest hover:bg-white/10 transition uppercase border border-white/5">Settings</button>
         </div>
     </aside>
 
     <div class="flex-1 flex flex-col">
         
-        <header class="h-20 flex items-center justify-between px-10 bg-black/20 backdrop-blur-md z-10">
-            <div class="flex flex-col">
-                <h2 id="pageTitle" class="text-xl font-extrabold tracking-tight">Studio Home</h2>
-                <div class="flex items-center space-x-2 mt-1">
-                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">System Operational</p>
+        <header class="h-20 flex items-center justify-between px-10 bg-black/40 backdrop-blur-xl z-10 border-b border-white/5">
+            <h2 id="pageTitle" class="text-lg font-black uppercase tracking-tighter">Studio Home</h2>
+            <div class="flex items-center space-x-6">
+                <div class="relative w-64 group">
+                    <input type="text" placeholder="Search templates..." class="w-full bg-white/5 border border-white/10 rounded-full py-2 px-4 text-[11px] outline-none focus:border-blue-500 transition">
                 </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button class="px-5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition font-bold text-xs">Help</button>
-                <button class="btn-3d px-8 py-2.5 rounded-xl text-white font-black text-xs tracking-wider">+ NEW PROJECT</button>
+                <button class="btn-3d px-6 py-2 rounded-full text-white font-black text-[10px] tracking-widest uppercase">+ New Project</button>
             </div>
         </header>
 
         <main class="flex-1 overflow-y-auto p-10">
             
             <section id="home" class="content-section active">
-                <div class="glass-card p-12 mb-12 bg-gradient-to-br from-blue-600/10 to-purple-600/10">
-                    <h1 class="text-5xl font-black mb-4 leading-tight tracking-tighter">Create Your <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Masterpiece.</span></h1>
-                    <p class="text-gray-400 max-w-xl text-sm">Akses semua modul produksi riset dan aset kreatif TRUELINE dalam satu dashboard cerdas.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div onclick="showPage('video', this)" class="glass-card p-10 cursor-pointer group">
-                        <div class="text-4xl mb-6 group-hover:scale-110 transition duration-500">🎥</div>
-                        <h3 class="font-black text-xl mb-2">Video Engine</h3>
-                        <p class="text-gray-500 text-xs leading-relaxed">Sistem editing video otomatis dengan alur kerja cinematic.</p>
-                    </div>
-                    <div onclick="showPage('canva', this)" class="glass-card p-10 cursor-pointer group">
-                        <div class="text-4xl mb-6 group-hover:scale-110 transition duration-500">🖼️</div>
-                        <h3 class="font-black text-xl mb-2">Canva Assets</h3>
-                        <p class="text-gray-500 text-xs leading-relaxed">Template desain grafis profesional siap pakai untuk brand Anda.</p>
-                    </div>
-                    <div onclick="showPage('ppt', this)" class="glass-card p-10 cursor-pointer group">
-                        <div class="text-4xl mb-6 group-hover:scale-110 transition duration-500">📈</div>
-                        <h3 class="font-black text-xl mb-2">PPT Pro Deck</h3>
-                        <p class="text-gray-500 text-xs leading-relaxed">Pitch deck dan presentasi bisnis dengan desain futuristik.</p>
+                <div class="glass-card p-12 mb-10 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200')] bg-cover bg-center">
+                    <div class="backdrop-blur-sm bg-black/20 p-8 rounded-3xl inline-block border border-white/10">
+                        <h1 class="text-4xl font-black mb-2 italic tracking-tighter">THE FUTURE OF <br>PRODUCTION.</h1>
+                        <p class="text-gray-200 text-xs mb-6 opacity-80">Empowering culinary & tech creators in Lombok Barat.</p>
+                        <button onclick="showPage('video')" class="bg-white text-black px-8 py-3 rounded-full font-black text-[10px] uppercase hover:bg-blue-400 transition">Explore Templates</button>
                     </div>
                 </div>
-            </section>
 
-            <section id="canva" class="content-section">
-                <h1 class="text-3xl font-black mb-8">Canva Templates</h1>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div class="glass-card aspect-square flex flex-col items-center justify-center border-dashed border-2 border-white/10 hover:border-blue-500 group">
-                        <span class="text-3xl text-gray-700 group-hover:text-blue-500 transition">+</span>
-                        <span class="text-[10px] font-bold text-gray-700 group-hover:text-blue-500 uppercase mt-2">New Design</span>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="glass-card p-6 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-2">🎬</span>
+                        <p class="font-bold text-[10px] uppercase">1,204 Video</p>
                     </div>
-                    <div class="glass-card aspect-square bg-[url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=500')] bg-cover"></div>
-                    <div class="glass-card aspect-square bg-[url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=500')] bg-cover"></div>
-                </div>
-            </section>
-
-            <section id="ppt" class="content-section">
-                <h1 class="text-3xl font-black mb-8">Presentation Deck</h1>
-                <div class="grid grid-cols-1 gap-6">
-                    <div class="glass-card p-8 flex items-center justify-between border-l-4 border-orange-500">
-                        <div class="flex items-center space-x-6">
-                            <div class="w-16 h-16 bg-orange-500/10 rounded-2xl flex items-center justify-center text-orange-500 text-xl font-black shadow-lg">PPT</div>
-                            <div>
-                                <p class="font-black text-lg">Pitch_Deck_Trueline_2026.pptx</p>
-                                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-1">Last Edited: 2 Hours Ago</p>
-                            </div>
-                        </div>
-                        <button class="btn-3d px-8 py-3 rounded-xl text-xs font-black">EDIT SLIDE</button>
+                    <div class="glass-card p-6 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-2">🎨</span>
+                        <p class="font-bold text-[10px] uppercase">850 Canva</p>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-2">📊</span>
+                        <p class="font-bold text-[10px] uppercase">320 PPT</p>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-2">🤖</span>
+                        <p class="font-bold text-[10px] uppercase">AI Ready</p>
                     </div>
                 </div>
             </section>
 
             <section id="video" class="content-section">
-                <h1 class="text-3xl font-black mb-8">Video Production</h1>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div class="glass-card overflow-hidden">
-                        <div class="aspect-video bg-blue-900/20 flex items-center justify-center">
-                            <span class="text-blue-400 animate-pulse font-black text-[10px]">PREVIEWING...</span>
+                <div class="flex justify-between items-end mb-8">
+                    <h2 class="text-3xl font-black tracking-tighter uppercase italic">Video Templates</h2>
+                    <div class="flex space-x-2">
+                        <button class="px-4 py-1.5 rounded-full bg-blue-600 text-[10px] font-bold">Trending</button>
+                        <button class="px-4 py-1.5 rounded-full bg-white/5 text-[10px] font-bold hover:bg-white/10">Newest</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <div class="glass-card group cursor-pointer">
+                        <div class="aspect-[9/16] img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1492691523567-6170c28ec362?q=80&w=300')">
+                            <div class="p-3"><span class="tag-premium italic">Premium</span></div>
                         </div>
-                        <div class="p-5">
-                            <p class="font-black text-xs truncate mb-1 text-blue-400">Cinematic_Project_V1</p>
-                            <p class="text-[9px] font-bold text-gray-600 uppercase">4K Render • 00:30</p>
+                        <div class="p-3">
+                            <p class="font-bold text-[10px] truncate">Cinematic Food v1</p>
+                            <p class="text-[9px] text-gray-500 mt-1 uppercase">12.5k Used</p>
+                        </div>
+                    </div>
+                    </div>
+            </section>
+
+            <section id="canva" class="content-section">
+                <h2 class="text-3xl font-black tracking-tighter uppercase italic mb-8">Canva Assets</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="glass-card aspect-square img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=500')">
+                        <div class="w-full h-full bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-sm">
+                            <span class="font-black text-[10px] uppercase tracking-widest border-2 px-4 py-2">Use Design</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ppt" class="content-section">
+                <h2 class="text-3xl font-black tracking-tighter uppercase italic mb-8">Professional Deck</h2>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="glass-card p-6 flex items-center justify-between group">
+                        <div class="flex items-center space-x-6">
+                            <div class="w-14 h-14 bg-gradient-to-br from-orange-400 to-red-600 rounded-xl flex items-center justify-center font-black italic">PPT</div>
+                            <div>
+                                <h3 class="font-black text-sm group-hover:text-blue-400 transition">Culinary Business Pitch 2026</h3>
+                                <p class="text-[10px] text-gray-500 uppercase mt-1">25 Slides • Modern Aesthetic</p>
+                            </div>
+                        </div>
+                        <button class="bg-white/5 border border-white/10 px-6 py-2 rounded-full font-black text-[10px] uppercase hover:bg-white/10">Download</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ai" class="content-section">
+                <h2 class="text-3xl font-black tracking-tighter uppercase italic mb-4">AI Magic Wall</h2>
+                <p class="text-gray-500 text-xs mb-8">Hasil automasi Meta-Orchestrator OS v2.0</p>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="glass-card p-1 border-blue-500/30">
+                        <div class="aspect-video bg-gradient-to-br from-blue-900 to-black rounded-xl overflow-hidden flex items-center justify-center">
+                             <div class="text-center">
+                                 <div class="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                                 <p class="text-[9px] font-bold uppercase tracking-widest">Generating Asset...</p>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -202,26 +199,25 @@
 
     <script>
         function showPage(pageId, element) {
-            // Sembunyikan semua section
-            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-            // Tampilkan section yang dipilih
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             
-            // Update Judul Navbar
             const titles = {
                 'home': 'Studio Home',
-                'video': 'Video Production',
-                'canva': 'Canva Templates',
-                'ppt': 'PowerPoint Pro'
+                'video': 'Video Marketplace',
+                'canva': 'Canva Ecosystem',
+                'ppt': 'Pitch Deck Pro',
+                'ai': 'AI Orchestration'
             };
             document.getElementById('pageTitle').innerText = titles[pageId];
 
-            // Update UI Sidebar (Highlight Tombol)
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             
-            // Jika diklik dari menu home, cari tombol yang sesuai di sidebar
             if(!element) {
-                document.querySelector(`button[onclick*="${pageId}"]`).classList.add('active');
+                // Find matching sidebar button if call comes from inside home cards
+                document.querySelectorAll('.nav-link').forEach(btn => {
+                    if(btn.getAttribute('onclick').includes(pageId)) btn.classList.add('active');
+                });
             } else {
                 element.classList.add('active');
             }
