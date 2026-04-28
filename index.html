@@ -3,46 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRUELINE | Next-Gen Content Orchestrator</title>
+    <title>TRUELINE | Creative Orchestrator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #050505; color: white; letter-spacing: -0.02em; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .gradient-text { background: linear-gradient(to right, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body { 
+            background-color: #0a0a0a; 
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+        }
+        .capcut-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .capcut-card:hover {
+            border-color: #2563eb;
+            transform: translateY(-5px);
+            background: #222;
+        }
+        .gradient-btn {
+            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+        }
     </style>
 </head>
 <body>
-    <nav class="fixed w-full z-50 p-5 flex justify-between items-center glass">
-        <div class="text-2xl font-black tracking-tighter gradient-text">TRUELINE</div>
-        <div class="hidden md:flex space-x-10 text-xs font-bold uppercase tracking-widest text-gray-500">
-            <a href="#" class="hover:text-white transition">Engine</a>
-            <a href="#" class="hover:text-white transition">Assets</a>
-            <a href="founder-panel.html" class="hover:text-indigo-400 transition">Founder</a>
+
+    <nav class="flex items-center justify-between px-8 py-4 border-b border-white/5 sticky top-0 bg-[#0a0a0a]/80 backdrop-blur-md z-50">
+        <div class="flex items-center space-x-10">
+            <div class="text-2xl font-black tracking-tighter text-white">TRUELINE</div>
+            <div class="hidden md:flex space-x-6 text-sm font-medium text-gray-400">
+                <a href="#" class="hover:text-white transition">Templates</a>
+                <a href="#" class="hover:text-white transition">Magic Tools</a>
+                <a href="founder-panel.html" class="hover:text-blue-400 transition">Founder</a>
+            </div>
         </div>
-        <button onclick="window.location.href='dashboard.html'" class="bg-white text-black px-6 py-2 rounded-full text-xs font-bold hover:invert transition">
-            DASHBOARD
-        </button>
+        <div class="flex items-center space-x-4">
+            <button onclick="window.location.href='dashboard.html'" class="text-sm font-bold text-white hover:text-gray-300">Log in</button>
+            <button onclick="window.location.href='dashboard.html'" class="gradient-btn px-6 py-2 rounded-full text-sm font-bold shadow-lg shadow-blue-500/20">Sign up free</button>
+        </div>
     </nav>
 
-    <section class="relative pt-48 pb-32 px-6 text-center">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-96 bg-indigo-500/20 blur-[120px] -z-10"></div>
-        
-        <h1 class="text-6xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tighter">
-            PRODUCTION-GRADE <br> <span class="gradient-text">RESEARCH ENGINE.</span>
+    <header class="py-20 px-8 text-center max-w-4xl mx-auto">
+        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight">
+            Semua bisa jadi <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Kreator Pro.</span>
         </h1>
-        <p class="text-gray-400 max-w-2xl mx-auto mb-12 text-lg md:text-xl font-light">
-            Automate your creative workflow with our high-fidelity orchestration system. Built for speed, reliability, and precision.
+        <p class="text-gray-400 text-lg md:text-xl mb-10 font-light">
+            Platform pengolah konten otomatis yang cerdas, cepat, dan presisi. 
+            Mulai bangun mahakaryamu hari ini.
         </p>
-        
-        <div class="flex flex-col md:flex-row justify-center items-center gap-5">
-            <button onclick="window.location.href='dashboard.html'" class="w-full md:w-auto bg-indigo-600 px-12 py-5 rounded-2xl font-bold text-lg hover:bg-indigo-500 transition shadow-xl shadow-indigo-500/20">
-                Get Started
-            </button>
-            <button class="w-full md:w-auto glass px-10 py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 hover:bg-white/5 transition">
-                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5 h-5">
-                Login with Google
-            </button>
+        <div class="flex flex-wrap justify-center gap-4">
+            <button class="bg-white text-black px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition">Mulai di Browser</button>
+            <button class="bg-[#1a1a1a] text-white px-10 py-4 rounded-lg font-bold text-lg border border-white/10 hover:bg-[#252525] transition">Unduh Aplikasi</button>
         </div>
+    </header>
+
+    <section class="px-8 pb-20 max-w-7xl mx-auto">
+        <div class="flex justify-between items-end mb-8">
+            <h2 class="text-2xl font-bold italic underline decoration-blue-500 underline-offset-8">Rekomendasi Template</h2>
+            <a href="#" class="text-sm text-gray-400 hover:text-blue-500">Lihat semua ></a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div class="capcut-card aspect-[9/16] relative group cursor-pointer">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <p class="text-xs font-bold truncate">Cinematic Food V1</p>
+                    <p class="text-[10px] text-gray-400">1.2M Diambil</p>
+                </div>
+            </div>
+            <div class="capcut-card aspect-[9/16] relative group cursor-pointer bg-blue-900/20">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <p class="text-xs font-bold truncate">Aesthetic Vlog</p>
+                    <p class="text-[10px] text-gray-400">800K Diambil</p>
+                </div>
+            </div>
+            <div class="capcut-card aspect-[9/16] relative group cursor-pointer bg-purple-900/20">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <p class="text-xs font-bold truncate">Transition Beat</p>
+                    <p class="text-[10px] text-gray-400">2.5M Diambil</p>
+                </div>
+            </div>
+            </div>
     </section>
+
 </body>
 </html>
