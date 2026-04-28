@@ -36,5 +36,32 @@
             <button class="bg-white text-black px-6 py-3 rounded-xl font-black">+ Buat Video Baru</button>
         </div>
     </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+  // Ganti dengan URL & Key dari Dashboard Supabase kamu (Menu Settings > API)
+  const supabaseUrl = 'URL_SUPABASE_KAMU'
+  const supabaseKey = 'ANON_KEY_KAMU'
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
+  async function uploadFile(event) {
+    const file = event.target.files[0]
+    if (!file) return;
+
+    const fileName = `${Date.now()}_${file.name}`
+    
+    const { data, error } = await supabase.storage
+      .from('aset-user')
+      .upload(fileName, file)
+
+    if (error) {
+        alert('Gagal upload: ' + error.message)
+    } else {
+        alert('Berhasil upload! File tersimpan di gudang.')
+    }
+  }
+
+  // Hubungkan ke tombol upload di dashboard kamu
+  // Tambahkan id="file-input" pada tag <input type="file"> kamu
+</script>
 </body>
 </html>
