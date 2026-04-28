@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trueline Editor</title>
+  <script src="https://unpkg.com/pptxgenjs/dist/pptxgen.bundle.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      display: flex;
+      height: 100vh;
+    }
+
+    #sidebar {
+      width: 200px;
+      background: #111;
+      color: white;
+      padding: 10px;
+    }
+
+    #canvas {
+      flex: 1;
+      background: #f0f0f0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .text-box {
+      position: absolute;
+      padding: 5px;
+      background: white;
+      border: 1px solid #ccc;
+      cursor: move;
+    }
+
+    #timeline {
+      height: 100px;
+      background: #222;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      overflow-x: auto;
+    }
+
+    .slide {
+      width: 80px;
+      height: 60px;
+      background: #555;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    button {
+      margin: 5px 0;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="sidebar">
+  <h3>Trueline</h3>
+  <button onclick="addText()">+ Text</button>
+  <button onclick="newSlide()">+ Slide</button>
+  <button onclick="exportPPT()">⬇ Export PPT</button>
+</div>
+
+<div style="flex:1; display:flex; flex-direction:column;">
+  <div id="canvas"></div>
+  <div id="timeline"></div>
+</div>
+
+<script>
+let slides = [[]];
+let currentSlide = 0;
+
+function render() {
+  const canvas = document.getElementById("canvas");
+  canvas.innerHTML = "";
+
+  slides[currentSlide].forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "text-box";
+    div.innerText = item.text;
+    div.style.left = item.x + "px";
+    div.style.top = item.y + "px";
+
+    makeDraggable(div, index);
+
+    canvas.appendChild(div);
+  });
+
+  renderTimeline();
+}
+
+function addText() {
+  slides[currentSlide].push({ text: "Edit me", x: 50, y: 50 });
+  render();
+}
+
+function newSlide() {
+  slides.push([]);
+  currentSlide = slides.length - 1;
+  render();
+}
+
+function renderTimeline() {
+  const timeline = document.getElementById("timeline");
+  timeline.innerHTML = "";
+
+  slides.forEach((_, i) => {
+    const div = document.createElement("div");
+    div.className = "slide";
+    div.innerText = i + 1;
+
+    div.onclick = () => {
+      currentSlide = i;
+      render();
+    };
+
+    timeline.appendChild(div);
+  });
+}
+
+function makeDraggable(el, index) {
+  let offsetX, offsetY;
+
+  el.onmousedown = function(e) {
+    offsetX = e.clientX - el.offsetLeft;
+    offsetY = e.clientY - el.offsetTop;
+
+    document.onmousemove = function(e) {
+      el.style.left = (e.clientX - offsetX) + "px";
+      el.style.top = (e.clientY - offsetY) + "px";
+
+      slides[currentSlide][index].x = el.offsetLeft;
+      slides[currentSlide][index].y = el.offsetTop;
+    };
+
+    document.onmouseup = function() {
+      document.onmousemove = null;
+    };
+  };
+}
+
+function exportPPT() {
+  let pptx = new PptxGenJS();
+
+  slides.forEach(slideData => {
+    let slide = pptx.addSlide();
+
+    slideData.forEach(item => {
+      slide.addText(item.text, {
+        x: item.x / 100,
+        y: item.y / 100,
+        fontSize: 18
+      });
+    });
+  });
+
+  pptx.writeFile("trueline.pptx");
+}
+
+render();
+</script>
+
+</body>
+</html>
