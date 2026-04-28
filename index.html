@@ -41,9 +41,15 @@
 
 <script type="module">
 
-// 🔥 FIREBASE (VERSI STABIL)
+// 🔥 FIREBASE
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -56,20 +62,38 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔥 LOGIN FIX (STABIL)
+// 🔥 LOGIN STATE
 let currentUser = null;
+const status = document.getElementById("status");
 
+// 🔥 AMBIL HASIL REDIRECT (INI KUNCI)
+getRedirectResult(auth)
+  .then((result) => {
+    if (result && result.user) {
+      currentUser = result.user;
+      status.innerText = "Login: " + result.user.email;
+      console.log("Redirect login sukses");
+    }
+  })
+  .catch((error) => {
+    console.error("Redirect error:", error);
+  });
+
+// 🔥 MONITOR LOGIN
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    status.innerText = "Login: " + user.email;
+  } else {
+    status.innerText = "Belum login";
+  }
+});
+
+// LOGIN BUTTON
 document.getElementById("loginBtn").onclick = () => {
   const provider = new GoogleAuthProvider();
   signInWithRedirect(auth, provider);
 };
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-    document.getElementById("status").innerText = "Login: " + user.email;
-  }
-});
 
 // 🎬 EDITOR
 let slides = [[]];
@@ -122,20 +146,14 @@ function renderTimeline() {
 // ☁️ SAVE
 document.getElementById("saveBtn").onclick = async () => {
   if (!currentUser) return alert("Login dulu!");
-
-  await setDoc(doc(db, "projects", currentUser.uid), {
-    slides: slides
-  });
-
+  await setDoc(doc(db, "projects", currentUser.uid), { slides });
   alert("Saved!");
 };
 
 // 📂 LOAD
 document.getElementById("loadBtn").onclick = async () => {
   if (!currentUser) return alert("Login dulu!");
-
   const snap = await getDoc(doc(db, "projects", currentUser.uid));
-
   if (snap.exists()) {
     slides = snap.data().slides;
     render();
