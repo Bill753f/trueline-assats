@@ -73,6 +73,48 @@
             </div>
         </div>
     </main>
+<input type="file" id="hidden-file-input" class="hidden" accept="video/*,audio/*,image/*" onchange="updateProjectList(event)">
 
+<script>
+    // 1. Hubungkan tombol biru "Create New Project" ke Input File
+    document.addEventListener('DOMContentLoaded', () => {
+        const createBtn = document.querySelector('button.bg-blue-600');
+        const fileInput = document.getElementById('hidden-file-input');
+
+        if (createBtn && fileInput) {
+            createBtn.onclick = () => fileInput.click();
+        }
+    });
+
+    // 2. Fungsi untuk menampilkan nama file yang baru diupload ke daftar
+    function updateProjectList(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Ambil wadah (grid) tempat proyek berada
+        const projectGrid = document.querySelector('.grid');
+        
+        // Buat tampilan kartu proyek baru
+        const newProject = document.createElement('div');
+        newProject.className = "group cursor-pointer animate-pulse";
+        newProject.innerHTML = `
+            <div class="aspect-video bg-blue-900/20 rounded-xl mb-3 border border-blue-500/50 flex items-center justify-center overflow-hidden">
+                <span class="text-blue-400 text-[10px] font-bold uppercase tracking-widest text-center px-2">${file.name}</span>
+            </div>
+            <p class="text-sm font-semibold truncate text-blue-400">${file.name}</p>
+            <p class="text-[11px] text-gray-500 uppercase">Just Now</p>
+        `;
+
+        // Masukkan ke urutan pertama di grid
+        projectGrid.prepend(newProject);
+
+        // Berhenti animasi pulse setelah 2 detik (ceritanya simulasi loading)
+        setTimeout(() => {
+            newProject.classList.remove('animate-pulse');
+        }, 2000);
+
+        alert("File '" + file.name + "' berhasil dipilih! (Simulasi Upload)");
+    }
+</script>
 </body>
 </html>
