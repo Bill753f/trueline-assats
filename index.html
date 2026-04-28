@@ -100,6 +100,35 @@
         </div>
         <p>&copy; 2026 TRUELINE ASSETS. Semua hak dilindungi undang-undang.</p>
     </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
+<script>
+  // 1. Inisialisasi Koneksi (Ganti dengan data punyamu)
+  const supabaseUrl = 'PASTE_URL_SUPABASE_DISINI'
+  const supabaseKey = 'PASTE_ANON_KEY_DISINI'
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
+  // 2. Fungsi untuk Panggil Jendela Google Login
+  async function loginGoogle() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        // Setelah login berhasil, lempar user ke halaman dashboard
+        redirectTo: window.location.origin + '/dashboard' 
+      }
+    })
+    
+    if (error) console.error('Error login:', error.message)
+  }
+
+  // 3. Hubungkan Mesin ke Tombol yang ada di atas tadi
+  // Kita cari tombol yang punya teks "Lanjutkan dengan Google"
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnGoogle = document.querySelector('button.animate-shimmer');
+    if (btnGoogle) {
+      btnGoogle.onclick = loginGoogle;
+    }
+  });
+</script>
 </body>
 </html>
