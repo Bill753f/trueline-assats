@@ -1,62 +1,33 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Founder Panel | TRUELINE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #050505; color: white; font-family: sans-serif; visibility: hidden; }
-    </style>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
-<body>
-    
-    <div id="content" class="max-w-5xl mx-auto p-10">
-        <div class="border-b border-white/10 pb-6 mb-10 flex justify-between items-end">
-            <div>
-                <h1 class="text-4xl font-black italic text-blue-600 tracking-tighter">FOUNDER CENTRAL</h1>
-                <p class="text-gray-500 text-[10px] uppercase tracking-[0.2em]">Restricted Access • System v2.0</p>
-            </div>
-            <button onclick="window.location.href='dashboard.html'" class="bg-white/5 px-4 py-2 rounded text-[10px] font-bold hover:bg-red-600 transition">SECURE LOGOUT</button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-[#111] p-6 rounded-2xl border border-white/5">
-                <p class="text-gray-500 text-[10px] font-bold mb-1">USER ACTIVITY</p>
-                <p class="text-3xl font-black">2.4k</p>
-            </div>
-            <div class="bg-[#111] p-6 rounded-2xl border border-white/5">
-                <p class="text-gray-500 text-[10px] font-bold mb-1">SERVER HEALTH</p>
-                <p class="text-3xl font-black text-green-500">OPTIMAL</p>
-            </div>
-            <div class="bg-[#111] p-6 rounded-2xl border border-white/5">
-                <p class="text-gray-500 text-[10px] font-bold mb-1">STORAGE USED</p>
-                <p class="text-3xl font-black text-blue-500">14%</p>
+<body class="bg-black p-12">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-16">
+            <h1 class="text-5xl font-black italic tracking-tighter text-white">FOUNDER<span class="text-blue-600">.</span></h1>
+            <div class="text-right">
+                <p class="text-zinc-500 font-mono text-xs uppercase">Server Status</p>
+                <p class="text-emerald-500 font-bold">ENCRYPTED & ONLINE</p>
             </div>
         </div>
 
-        <div class="bg-[#111] p-6 rounded-2xl border border-white/5 font-mono text-[11px] text-gray-500">
-            <p class="mb-2 text-blue-500 font-bold tracking-widest uppercase underline underline-offset-4">Live Forensic Logs:</p>
-            <p>> Initializing TRUELINE Kernel...</p>
-            <p>> Syncing Global CDN Assets...</p>
-            <p>> Secure Connection Established.</p>
-            <p class="animate-pulse text-green-600">> Monitoring Node-01 activity...</p>
+        <div class="grid grid-cols-3 gap-6 mb-12">
+            <div class="glass-panel p-8 rounded-3xl">
+                <p class="text-zinc-500 text-xs font-bold uppercase mb-2">Active Sessions</p>
+                <p class="text-4xl font-bold">142</p>
+            </div>
+        </div>
+
+        <div class="glass-panel p-8 rounded-3xl border-red-500/20">
+            <h3 class="text-red-500 text-xs font-black uppercase mb-4 italic">Security Logs</h3>
+            <div class="font-mono text-[10px] text-zinc-500 space-y-2">
+                <p>[14:02:11] Admin login detected from IP 182.1.XX.XX</p>
+                <p>[14:05:44] Exporting Master: TRUELINE_v4_Final.mp4</p>
+            </div>
         </div>
     </div>
-
-    <script>
-        // MASUKKAN PASSWORD DI SINI (Contoh: founder2026)
-        const KUNCI = "founder2026";
-        
-        let login = prompt("ENTER FOUNDER ACCESS KEY:");
-
-        if (login === KUNCI) {
-            // Jika benar, tampilkan halaman
-            document.body.style.visibility = "visible";
-        } else {
-            // Jika salah, tendang balik ke halaman depan
-            alert("ACCESS DENIED! Invalid Key.");
-            window.location.href = "index.html";
-        }
-    </script>
 </body>
 </html>
