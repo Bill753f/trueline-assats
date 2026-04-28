@@ -48,9 +48,10 @@
 </div>
 
 <script type="module">
+
 // 🔥 FIREBASE MODERN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -63,10 +64,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// STATE GLOBAL
+// 🔥 FIX LOGIN STATE
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    console.log("Login:", user.uid);
+  } else {
+    currentUser = null;
+    console.log("Belum login");
+  }
+});
+
+// STATE
 window.slides = [[]];
 let currentSlide = 0;
-let selectedIndex = null;
 
 // RENDER
 function render() {
@@ -81,7 +94,6 @@ function render() {
       img.style.left = item.x + "px";
       img.style.top = item.y + "px";
       img.style.width = item.width + "px";
-
       makeDrag(img, i);
       canvas.appendChild(img);
       return;
@@ -102,7 +114,6 @@ function render() {
 
   renderTimeline();
 }
-
 window.render = render;
 
 // ADD
@@ -160,32 +171,35 @@ function renderTimeline() {
 window.saveProject = () => localStorage.setItem("t", JSON.stringify(slides));
 window.loadProject = () => { slides = JSON.parse(localStorage.getItem("t") || "[[]]"); render(); };
 
-// 🔥 FIREBASE FUNCTION
+// 🔥 LOGIN
 window.login = async function() {
   const provider = new GoogleAuthProvider();
   await signInWithPopup(auth, provider);
 };
 
+// ☁️ SAVE CLOUD (FIX)
 window.saveCloud = async function() {
-  const user = auth.currentUser;
-  if (!user) return alert("Login dulu!");
+  if (!currentUser) return alert("Login dulu!");
 
-  await setDoc(doc(db, "projects", user.uid), {
+  await setDoc(doc(db, "projects", currentUser.uid), {
     slides: slides
   });
 
   alert("Saved online!");
 };
 
+// ☁️ LOAD CLOUD (FIX)
 window.loadCloud = async function() {
-  const user = auth.currentUser;
-  if (!user) return alert("Login dulu!");
+  if (!currentUser) return alert("Login dulu!");
 
-  const snap = await getDoc(doc(db, "projects", user.uid));
+  const snap = await getDoc(doc(db, "projects", currentUser.uid));
 
   if (snap.exists()) {
     slides = snap.data().slides;
     render();
+    alert("Loaded!");
+  } else {
+    alert("Belum ada data");
   }
 };
 
@@ -219,6 +233,7 @@ window.exportVideo = async function() {
 };
 
 render();
+
 </script>
 
 </body>
