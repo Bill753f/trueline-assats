@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trueline Dashboard</title>
+</head>
+<body style="font-family:Arial; margin:20px;">
 
+  <h2>📁 Dashboard Project</h2>
+
+  <button onclick="createProject()">+ Buat Project Baru</button>
+
+  <ul id="list"></ul>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let user;
+
+    onAuthStateChanged(auth, (u) => {
+      if (!u) window.location.href = "index.html";
+      user = u;
+      loadProjects();
+    });
+
+    async function createProject() {
+      await addDoc(collection(db, "projects"), {
+        uid: user.uid,
+        name: "Project Baru",
+        frames: []
+      });
+
+      loadProjects();
+    }
+
+    async function loadProjects() {
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+
+      const snap = await getDocs(collection(db, "projects"));
+
+      snap.forEach(doc => {
+        if (doc.data().uid === user.uid) {
+          let li = document.createElement("li");
+          li.innerHTML = `
+            ${doc.data().name}
+            <button onclick="openEditor('${doc.id}')">Edit</button>
+          `;
+          list.appendChild(li);
+        }
+      });
+    }
+
+    window.openEditor = (id) => {
+      window.location.href = "editor.html?id=" + id;
+    };
+  </script>
+
+</body>
+</html>
