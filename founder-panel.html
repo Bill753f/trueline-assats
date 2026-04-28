@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Founder Central | TRUELINE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // KUNCI KEAMANAN:
+        // Ganti "admin123" dengan password rahasiamu sendiri
+        const SECRET_KEY = "admin123"; 
+        
+        const access = prompt("Authentication Required. Enter Founder Key:");
+        
+        if (access !== SECRET_KEY) {
+            alert("ACCESS DENIED. Redirecting...");
+            window.location.href = "index.html";
+        }
+    </script>
+</head>
+<body class="bg-[#050505] text-white p-10">
+    
+    <div class="max-w-6xl mx-auto">
+        <header class="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
+            <div>
+                <h1 class="text-3xl font-black italic text-blue-500 tracking-tighter">FOUNDER PANEL</h1>
+                <p class="text-gray-500 text-sm italic">Status: System Operational (v2.0)</p>
+            </div>
+            <button onclick="window.location.href='dashboard.html'" class="bg-white/5 px-6 py-2 rounded-lg text-xs font-bold hover:bg-red-500 transition">Exit Panel</button>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/5">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-2">Total Users</p>
+                <p class="text-3xl font-black text-blue-400">1,284</p>
+            </div>
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/5">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-2">Server Load</p>
+                <p class="text-3xl font-black text-green-400">12%</p>
+            </div>
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/5">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-2">Revenue (MTD)</p>
+                <p class="text-3xl font-black text-purple-400">$4,200</p>
+            </div>
+        </div>
+
+        <div class="bg-white/5 rounded-2xl p-8 border border-white/5">
+            <h3 class="text-lg font-bold mb-4">System Forensic Logs</h3>
+            <div class="space-y-3 font-mono text-[11px] text-gray-400">
+                <p><span class="text-green-500">[OK]</span> AI Orchestrator Layer Initialized...</p>
+                <p><span class="text-green-500">[OK]</span> CDN Assets Global Sync Complete.</p>
+                <p><span class="text-blue-500">[INFO]</span> New project created from ID_User_992.</p>
+                <p class="animate-pulse"><span class="text-yellow-500">[SCAN]</span> Monitoring unusual traffic patterns...</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
