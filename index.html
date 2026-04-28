@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trueline - Login</title>
+  <title>Trueline Login</title>
 </head>
 <body style="font-family:Arial; text-align:center; margin-top:100px;">
 
   <h1>🎬 Trueline</h1>
-  <p>Login untuk masuk dashboard</p>
+  <button onclick="loginGoogle()">Login dengan Google</button>
 
-  <button id="loginBtn">Login Google</button>
-
+  <!-- FIREBASE + LOGIN -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
     from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID"
+      apiKey: "AIzaSyAWqV29Xz1I4P0lYYEFzt1QV9wcUhfGqxM",
+      authDomain: "trueline-19ae3.firebaseapp.com",
+      projectId: "trueline-19ae3",
+      storageBucket: "trueline-19ae3.firebasestorage.app",
+      messagingSenderId: "753238069219",
+      appId: "1:753238069219:web:e182d8aec00e5843fe5ad6"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-    document.getElementById("loginBtn").onclick = async () => {
-      const provider = new GoogleAuthProvider();
+    window.loginGoogle = async () => {
       await signInWithPopup(auth, provider);
     };
 
