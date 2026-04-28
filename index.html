@@ -3,45 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRUELINE | Creative Editor</title>
+    <title>TRUELINE | Creative Engine v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0a0a0a; color: white; font-family: sans-serif; }
-        .gradient-text { background: linear-gradient(90deg, #2563eb, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .capcut-card { background: #1a1a1a; border-radius: 12px; transition: 0.3s; border: 1px solid transparent; }
-        .capcut-card:hover { border-color: #2563eb; transform: translateY(-4px); }
+        :root { --accent: #3b82f6; --neon: #60a5fa; }
+        body { background-color: #000000; color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        
+        .gradient-text { background: linear-gradient(90deg, #3b82f6, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* --- LOGO STYLE ANIME PREMIUM --- */
+        .logo-box {
+            background: linear-gradient(135deg, #1a103f 0%, #050505 50%, #1e3a8a 100%);
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), inset 0 0 10px rgba(251, 191, 36, 0.3);
+            position: relative; overflow: hidden; transition: 0.5s ease;
+        }
+        .logo-box::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(251, 191, 36, 0.6), transparent 40%);
+            animation: rotateAnime 6s linear infinite;
+        }
+        @keyframes rotateAnime { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .anime-t {
+            font-family: 'New Tegomin', serif;
+            background: linear-gradient(180deg, #ffffff 0%, #9ca3af 50%, #ffffff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.8));
+        }
+
+        /* --- UI HELPERS --- */
+        .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; transition: 0.3s; }
+        .glass-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+        .nav-link { border-radius: 10px; color: #64748b; transition: 0.2s; position: relative; }
+        .nav-link.active { background: rgba(59, 130, 246, 0.1); color: #fff; }
+        .btn-glow { background: #fff; color: #000; font-weight: 800; transition: 0.3s; }
+        .btn-glow:hover { box-shadow: 0 0 20px rgba(255,255,255,0.4); }
+
+        /* --- PAGE DISPLAY --- */
+        #landing-page { display: block; }
+        #app-interface { display: none; }
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-thumb { background: #333; }
     </style>
 </head>
 <body>
-    <nav class="flex items-center justify-between px-8 py-4 border-b border-white/5 sticky top-0 bg-[#0a0a0a]/90 backdrop-blur-md z-50">
-        <div class="flex items-center space-x-10">
-            <div class="text-2xl font-black tracking-tighter italic">TRUELINE</div>
-            <div class="hidden md:flex space-x-6 text-sm font-medium text-gray-400">
-                <a href="templates.html" class="hover:text-white transition">Templates</a>
-                <a href="#" class="hover:text-white transition">Magic Tools</a>
+
+    <div id="landing-page">
+        <nav class="flex items-center justify-between px-8 py-4 border-b border-white/5 sticky top-0 bg-black/90 backdrop-blur-md z-50">
+            <div class="flex items-center space-x-10">
+                <div class="text-2xl font-black tracking-tighter italic anime-t">TRUELINE</div>
+                <div class="hidden md:flex space-x-6 text-sm font-medium text-gray-400">
+                    <a href="#" class="hover:text-white transition">Templates</a>
+                    <a href="#" class="hover:text-white transition">Magic Tools</a>
+                </div>
             </div>
-        </div>
-        <div class="flex items-center space-x-4">
-            <button onclick="window.location.href='dashboard.html'" class="text-sm font-bold">Log in</button>
-            <button onclick="window.location.href='dashboard.html'" class="bg-blue-600 px-6 py-2 rounded-full text-sm font-bold">Sign up free</button>
-        </div>
-    </nav>
+            <div class="flex items-center space-x-4">
+                <button onclick="enterApp('home')" class="text-sm font-bold">Log in</button>
+                <button onclick="enterApp('home')" class="bg-blue-600 px-6 py-2 rounded-full text-sm font-bold btn-glow">Get Started</button>
+            </div>
+        </nav>
 
-    <header class="py-20 px-8 text-center">
-        <h1 class="text-6xl md:text-7xl font-black mb-6 leading-tight">Create your <br><span class="gradient-text">Masterpiece.</span></h1>
-        <p class="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">Platform cerdas untuk otomasi konten dan riset kreatif dengan standar produksi tinggi.</p>
-        <button onclick="window.location.href='dashboard.html'" class="bg-white text-black px-12 py-4 rounded-lg font-bold text-lg hover:bg-blue-500 hover:text-white transition">Get Started Free</button>
-    </header>
+        <header class="py-20 px-8 text-center">
+            <h1 class="text-6xl md:text-7xl font-black mb-6 leading-tight">Create your <br><span class="gradient-text">Masterpiece.</span></h1>
+            <p class="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">Platform cerdas untuk otomasi konten dan riset kreatif dengan standar produksi tinggi dari Lombok Barat.</p>
+            <button onclick="enterApp('editor')" class="bg-white text-black px-12 py-4 rounded-lg font-bold text-lg hover:bg-blue-500 hover:text-white transition">Start Editing Now</button>
+        </header>
 
-    <section class="px-8 max-w-7xl mx-auto pb-20">
-        <h2 class="text-xl font-bold mb-8 italic border-l-4 border-blue-600 pl-4">Recommended Templates</h2>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div class="capcut-card aspect-[9/16] bg-blue-900/10"></div>
-            <div class="capcut-card aspect-[9/16] bg-purple-900/10"></div>
-            <div class="capcut-card aspect-[9/16] bg-gray-900"></div>
-            <div class="capcut-card aspect-[9/16] bg-blue-900/10"></div>
-            <div class="capcut-card aspect-[9/16] bg-purple-900/10"></div>
+        <section class="px-8 max-w-7xl mx-auto pb-20">
+            <h2 class="text-xl font-bold mb-8 italic border-l-4 border-blue-600 pl-4 uppercase tracking-widest">Recommended Templates</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="glass-card aspect-[9/16] bg-blue-900/10 cursor-pointer overflow-hidden group" onclick="enterApp('editor')">
+                    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=300" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition">
+                </div>
+                <div class="glass-card aspect-[9/16] bg-purple-900/10 cursor-pointer"></div>
+                <div class="glass-card aspect-[9/16] bg-gray-900 cursor-pointer"></div>
+                <div class="glass-card aspect-[9/16] bg-blue-900/10 cursor-pointer"></div>
+                <div class="glass-card aspect-[9/16] bg-purple-900/10 cursor-pointer"></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="app-interface" class="flex h-screen overflow-hidden">
+        
+        <aside class="sidebar flex flex-col shrink-0 border-r border-white/5 w-[280px] bg-[#050505]">
+            <div class="p-8">
+                <div class="flex items-center space-x-4 mb-10 group cursor-pointer" onclick="backToLanding()">
+                    <div class="logo-box w-12 h-12 rounded-xl flex items-center justify-center z-10">
+                        <span class="anime-t text-2xl relative z-20 transition">T</span>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-black tracking-tighter uppercase leading-none italic">Trueline</h1>
+                        <p class="text-[8px] font-bold text-yellow-400 tracking-[0.3em] uppercase mt-1">Creative OS</p>
+                    </div>
+                </div>
+                
+                <nav class="space-y-1">
+                    <button onclick="showPage('home', this)" class="nav-link active w-full flex items-center space-x-4 px-4 py-3">
+                        <span>🏠</span> <span class="font-bold tracking-tight">Beranda</span>
+                    </button>
+                    <button onclick="showPage('editor', this)" class="nav-link w-full flex items-center space-x-4 px-4 py-3 hover:bg-white/5">
+                        <span>✂️</span> <span class="font-bold tracking-tight text-gray-300">Advanced Editor</span>
+                    </button>
+                    <button onclick="showPage('video', this)" class="nav-link w-full flex items-center space-x-4 px-4 py-3 hover:bg-white/5">
+                        <span>🎬</span> <span class="font-bold tracking-tight text-gray-300">Video Market</span>
+                    </button>
+                    <button onclick="showPage('ai', this)" class="nav-link w-full flex items-center space-x-4 px-4 py-3 hover:bg-white/5">
+                        <span>🤖</span> <span class="font-bold tracking-tight text-gray-300">AI Wall</span>
+                    </button>
+                </nav>
+            </div>
+            <div class="mt-auto p-6 border-t border-white/5">
+                <div class="bg-blue-600/5 p-4 rounded-xl border border-blue-500/20">
+                    <p class="text-[9px] font-bold text-blue-400 uppercase italic">v2.0 Stable</p>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-1 flex flex-col bg-[#080808]">
+            <header class="h-16 flex items-center justify-between px-10 border-b border-white/5 bg-black/50 backdrop-blur-md">
+                <h2 id="pageTitle" class="text-sm font-black uppercase tracking-widest text-blue-500">Beranda</h2>
+                <div class="flex items-center space-x-4">
+                    <button class="btn-glow px-6 py-2 rounded-lg text-[10px] uppercase italic" onclick="showPage('editor')">Create Project +</button>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-10">
+                <section id="home" class="content-section active">
+                    <h3 class="text-3xl font-black italic tracking-tighter mb-8">DASHBOARD FOUNDER</h3>
+                    <div class="grid grid-cols-4 gap-6">
+                        <div class="glass-card p-4 cursor-pointer group" onclick="showPage('editor')">
+                            <div class="aspect-video bg-gray-900 rounded-lg overflow-hidden mb-3">
+                                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            </div>
+                            <p class="font-bold text-xs uppercase">Recent_Project_01.mp4</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="editor" class="content-section">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-3xl font-black italic tracking-tighter uppercase">Advanced <span class="text-blue-500">Editor</span></h2>
+                        <button class="bg-blue-600 px-6 py-2 rounded-lg text-[10px] font-bold btn-glow">Export</button>
+                    </div>
+                    <div class="grid grid-cols-12 gap-6 h-[500px]">
+                        <div class="col-span-8 flex flex-col space-y-4">
+                            <div class="flex-1 glass-card bg-black flex items-center justify-center relative">
+                                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600" class="max-h-[80%] rounded shadow-2xl">
+                                <div class="absolute bottom-4 flex items-center space-x-6 bg-black/80 px-6 py-2 rounded-xl border border-white/10">
+                                    <button>⏪</button> <button class="w-10 h-10 bg-white text-black rounded-full">▶️</button> <button>⏩</button>
+                                </div>
+                            </div>
+                            <div class="h-32 glass-card p-4 bg-black/40 relative border-blue-500/10">
+                                <div class="h-6 bg-blue-500/20 border border-blue-500/40 rounded mb-2 w-full"></div>
+                                <div class="h-10 bg-gray-800 rounded w-2/3"></div>
+                                <div class="absolute top-0 bottom-0 left-1/4 w-[2px] bg-blue-500"></div>
+                            </div>
+                        </div>
+                        <div class="col-span-4 glass-card p-6 space-y-4 overflow-y-auto">
+                            <p class="font-black text-[10px] uppercase tracking-widest text-gray-500">Magic Tools</p>
+                            <div class="p-3 bg-white/5 rounded-lg border border-white/5 hover:border-blue-500/50 cursor-pointer uppercase font-bold text-[10px]">🪄 AI Auto-Cut</div>
+                            <div class="p-3 bg-white/5 rounded-lg border border-white/5 hover:border-pink-500/50 cursor-pointer uppercase font-bold text-[10px]">📝 Smart Caption</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="video" class="content-section"><h2 class="text-2xl font-black">VIDEO MARKETPLACE</h2></section>
+                <section id="ai" class="content-section"><h2 class="text-2xl font-black">AI MAGIC WALL</h2></section>
+            </main>
         </div>
-    </section>
+    </div>
+
+    <script>
+        // Fungsi masuk ke aplikasi dari Landing Page
+        function enterApp(pageId) {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('app-interface').style.display = 'flex';
+            showPage(pageId || 'home');
+        }
+
+        // Fungsi kembali ke Landing Page
+        function backToLanding() {
+            document.getElementById('landing-page').style.display = 'block';
+            document.getElementById('app-interface').style.display = 'none';
+        }
+
+        // Fungsi pindah antar menu di Dashboard
+        function showPage(pageId, element) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(pageId);
+            if(target) target.classList.add('active');
+
+            const titles = {
+                'home': 'Beranda Founder',
+                'editor': 'Advanced Editor Suite',
+                'video': 'Video Marketplace',
+                'ai': 'AI Orchestration'
+            };
+            document.getElementById('pageTitle').innerText = titles[pageId] || 'System';
+
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if(element) {
+                element.classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-link').forEach(btn => {
+                    if(btn.getAttribute('onclick').includes(pageId)) btn.classList.add('active');
+                });
+            }
+        }
+    </script>
 </body>
 </html>
