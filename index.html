@@ -28,20 +28,20 @@
 
   <div id="userStatus">Belum login</div>
 
-  <button onclick="login()">Login</button>
+  <button id="loginBtn">Login</button>
 
-  <button onclick="addText()">+ Text</button>
-  <button onclick="addImage()">+ Image</button>
-  <button onclick="newSlide()">+ Slide</button>
+  <button id="addTextBtn">+ Text</button>
+  <button id="addImageBtn">+ Image</button>
+  <button id="newSlideBtn">+ Slide</button>
 
-  <button onclick="saveProject()">💾 Local Save</button>
-  <button onclick="loadProject()">📂 Load</button>
+  <button id="saveLocalBtn">💾 Local Save</button>
+  <button id="loadLocalBtn">📂 Load</button>
 
-  <button onclick="saveCloud()">☁️ Save Online</button>
-  <button onclick="loadCloud()">☁️ Load Online</button>
+  <button id="saveCloudBtn">☁️ Save Online</button>
+  <button id="loadCloudBtn">☁️ Load Online</button>
 
-  <button onclick="exportPPT()">⬇ PPT</button>
-  <button onclick="exportVideo()">🎬 Video</button>
+  <button id="exportPPTBtn">⬇ PPT</button>
+  <button id="exportVideoBtn">🎬 Video</button>
 </div>
 
 <div style="flex:1; display:flex; flex-direction:column;">
@@ -51,7 +51,9 @@
 
 <script type="module">
 
-// 🔥 FIREBASE MODERN
+console.log("Script jalan...");
+
+// 🔥 FIREBASE
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
@@ -66,7 +68,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔥 LOGIN STATE
+// LOGIN STATE
 let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
@@ -75,32 +77,23 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user;
     status.innerText = "Login: " + user.email;
-    console.log("Login:", user.uid);
   } else {
     currentUser = null;
     status.innerText = "Belum login";
   }
 });
 
-// HANDLE REDIRECT RESULT
-getRedirectResult(auth)
-  .then((result) => {
-    if (result && result.user) {
-      console.log("Login sukses:", result.user.uid);
-    }
-  })
-  .catch((error) => {
-    console.error("Login error:", error);
-  });
+// HANDLE REDIRECT
+getRedirectResult(auth).catch(err => console.error(err));
 
-// LOGIN BUTTON
-window.login = function() {
+// LOGIN BUTTON FIX
+document.getElementById("loginBtn").addEventListener("click", () => {
   const provider = new GoogleAuthProvider();
   signInWithRedirect(auth, provider);
-};
+});
 
 // STATE
-window.slides = [[]];
+let slides = [[]];
 let currentSlide = 0;
 
 // RENDER
@@ -136,18 +129,23 @@ function render() {
 
   renderTimeline();
 }
-window.render = render;
 
-// ADD
-window.addText = function() {
+// ADD BUTTONS
+document.getElementById("addTextBtn").onclick = () => {
   slides[currentSlide].push({ text: "edit", x: 50, y: 50 });
   render();
 };
 
-window.addImage = function() {
+document.getElementById("addImageBtn").onclick = () => {
   let url = prompt("URL gambar:");
   if (!url) return;
   slides[currentSlide].push({ type: "image", src: url, x: 50, y: 50, width: 120 });
+  render();
+};
+
+document.getElementById("newSlideBtn").onclick = () => {
+  slides.push([]);
+  currentSlide = slides.length - 1;
   render();
 };
 
@@ -169,13 +167,7 @@ function makeDrag(el, i) {
   };
 }
 
-// SLIDE
-window.newSlide = function() {
-  slides.push([]);
-  currentSlide = slides.length - 1;
-  render();
-};
-
+// TIMELINE
 function renderTimeline() {
   let t = document.getElementById("timeline");
   t.innerHTML = "";
@@ -190,37 +182,33 @@ function renderTimeline() {
 }
 
 // LOCAL
-window.saveProject = () => localStorage.setItem("t", JSON.stringify(slides));
-window.loadProject = () => { slides = JSON.parse(localStorage.getItem("t") || "[[]]"); render(); };
+document.getElementById("saveLocalBtn").onclick = () => {
+  localStorage.setItem("t", JSON.stringify(slides));
+};
 
-// ☁️ SAVE CLOUD
-window.saveCloud = async function() {
+document.getElementById("loadLocalBtn").onclick = () => {
+  slides = JSON.parse(localStorage.getItem("t") || "[[]]");
+  render();
+};
+
+// CLOUD
+document.getElementById("saveCloudBtn").onclick = async () => {
   if (!currentUser) return alert("Login dulu!");
-
-  await setDoc(doc(db, "projects", currentUser.uid), {
-    slides: slides
-  });
-
+  await setDoc(doc(db, "projects", currentUser.uid), { slides });
   alert("Saved online!");
 };
 
-// ☁️ LOAD CLOUD
-window.loadCloud = async function() {
+document.getElementById("loadCloudBtn").onclick = async () => {
   if (!currentUser) return alert("Login dulu!");
-
   const snap = await getDoc(doc(db, "projects", currentUser.uid));
-
   if (snap.exists()) {
     slides = snap.data().slides;
     render();
-    alert("Loaded!");
-  } else {
-    alert("Belum ada data");
   }
 };
 
 // PPT
-window.exportPPT = function() {
+document.getElementById("exportPPTBtn").onclick = () => {
   let pptx = new PptxGenJS();
   slides.forEach(s => {
     let sl = pptx.addSlide();
@@ -239,7 +227,7 @@ window.exportPPT = function() {
 const { createFFmpeg, fetchFile } = FFmpeg;
 const ffmpeg = createFFmpeg({ log: true });
 
-window.exportVideo = async function() {
+document.getElementById("exportVideoBtn").onclick = async () => {
   await ffmpeg.load();
   let dataUrl = await html2canvas(document.getElementById("canvas")).then(c => c.toDataURL());
   ffmpeg.FS('writeFile','f.png',await fetchFile(dataUrl));
