@@ -3,86 +3,21 @@
 <head>
   <title>Trueline Editor</title>
 
+  <!-- LIB -->
   <script src="https://unpkg.com/pptxgenjs/dist/pptxgen.bundle.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
 
   <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      display: flex;
-      height: 100vh;
-      background: #181818;
-      color: white;
-    }
-
-    #sidebar {
-      width: 220px;
-      background: #111;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    button {
-      margin: 5px 0;
-      padding: 10px;
-      border: none;
-      background: #333;
-      color: white;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-
-    button:hover {
-      background: #555;
-    }
-
-    #canvas {
-      flex: 1;
-      background: #222;
-      position: relative;
-    }
-
-    .text-box {
-      position: absolute;
-      background: white;
-      color: black;
-      padding: 5px;
-      resize: both;
-      overflow: auto;
-      cursor: move;
-    }
-
-    img {
-      position: absolute;
-      resize: both;
-      cursor: move;
-    }
-
-    #timeline {
-      height: 90px;
-      background: #111;
-      display: flex;
-      padding: 10px;
-      overflow-x: auto;
-    }
-
-    .slide {
-      width: 70px;
-      height: 50px;
-      background: #444;
-      margin-right: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .active {
-      background: #00aaff;
-    }
+    body { margin:0; display:flex; height:100vh; background:#181818; color:white; font-family:Arial;}
+    #sidebar { width:220px; background:#111; padding:15px;}
+    button { width:100%; margin:5px 0; padding:10px; background:#333; color:white; border:none;}
+    #canvas { flex:1; background:#222; position:relative;}
+    .text-box { position:absolute; background:white; color:black; padding:5px; resize:both;}
+    img { position:absolute; resize:both;}
+    #timeline { height:90px; background:#111; display:flex; padding:10px;}
+    .slide { width:60px; height:40px; background:#444; margin-right:5px; display:flex; align-items:center; justify-content:center;}
+    .active { background:#00aaff;}
   </style>
 </head>
 
@@ -91,18 +26,20 @@
 <div id="sidebar">
   <h3>🎬 Trueline</h3>
 
+  <button onclick="login()">Login</button>
+
   <button onclick="addText()">+ Text</button>
   <button onclick="addImage()">+ Image</button>
   <button onclick="newSlide()">+ Slide</button>
 
-  <button onclick="saveProject()">💾 Save</button>
+  <button onclick="saveProject()">💾 Local Save</button>
   <button onclick="loadProject()">📂 Load</button>
+
+  <button onclick="saveCloud()">☁️ Save Online</button>
+  <button onclick="loadCloud()">☁️ Load Online</button>
 
   <button onclick="exportPPT()">⬇ PPT</button>
   <button onclick="exportVideo()">🎬 Video</button>
-
-  <input type="range" min="12" max="50" onchange="changeFont(this.value)">
-  <input type="color" onchange="changeColor(this.value)">
 </div>
 
 <div style="flex:1; display:flex; flex-direction:column;">
@@ -110,8 +47,24 @@
   <div id="timeline"></div>
 </div>
 
-<script>
-let slides = [[]];
+<script type="module">
+// 🔥 FIREBASE MODERN
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAWqV29Xz1I4P0lYYEFzt1QV9wcUhfGqxM",
+  authDomain: "trueline-19ae3.firebaseapp.com",
+  projectId: "trueline-19ae3",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// STATE GLOBAL
+window.slides = [[]];
 let currentSlide = 0;
 let selectedIndex = null;
 
@@ -120,196 +73,150 @@ function render() {
   const canvas = document.getElementById("canvas");
   canvas.innerHTML = "";
 
-  slides[currentSlide].forEach((item, index) => {
+  slides[currentSlide].forEach((item, i) => {
 
     if (item.type === "image") {
-      const img = document.createElement("img");
+      let img = document.createElement("img");
       img.src = item.src;
       img.style.left = item.x + "px";
       img.style.top = item.y + "px";
       img.style.width = item.width + "px";
 
-      img.onclick = () => selectedIndex = index;
-
-      makeDraggable(img, index);
+      makeDrag(img, i);
       canvas.appendChild(img);
       return;
     }
 
-    const div = document.createElement("div");
+    let div = document.createElement("div");
     div.className = "text-box";
     div.contentEditable = true;
     div.innerText = item.text;
     div.style.left = item.x + "px";
     div.style.top = item.y + "px";
-    div.style.fontSize = item.size + "px";
-    div.style.color = item.color;
 
-    div.onclick = () => selectedIndex = index;
+    div.oninput = () => slides[currentSlide][i].text = div.innerText;
 
-    div.oninput = () => {
-      slides[currentSlide][index].text = div.innerText;
-    };
-
-    makeDraggable(div, index);
+    makeDrag(div, i);
     canvas.appendChild(div);
   });
 
   renderTimeline();
 }
 
+window.render = render;
+
 // ADD
-function addText() {
-  slides[currentSlide].push({
-    text: "Edit text",
-    x: 50,
-    y: 50,
-    size: 20,
-    color: "#000000"
-  });
+window.addText = function() {
+  slides[currentSlide].push({ text: "edit", x: 50, y: 50 });
   render();
-}
+};
 
-function addImage() {
-  const url = prompt("Masukkan URL gambar:");
+window.addImage = function() {
+  let url = prompt("URL gambar:");
   if (!url) return;
-
-  slides[currentSlide].push({
-    type: "image",
-    src: url,
-    x: 50,
-    y: 50,
-    width: 120
-  });
-
+  slides[currentSlide].push({ type: "image", src: url, x: 50, y: 50, width: 120 });
   render();
-}
-
-// STYLE
-function changeFont(size) {
-  if (selectedIndex === null) return;
-  slides[currentSlide][selectedIndex].size = size;
-  render();
-}
-
-function changeColor(color) {
-  if (selectedIndex === null) return;
-  slides[currentSlide][selectedIndex].color = color;
-  render();
-}
-
-// SLIDE
-function newSlide() {
-  slides.push([]);
-  currentSlide = slides.length - 1;
-  render();
-}
-
-function renderTimeline() {
-  const timeline = document.getElementById("timeline");
-  timeline.innerHTML = "";
-
-  slides.forEach((_, i) => {
-    const div = document.createElement("div");
-    div.className = "slide " + (i === currentSlide ? "active" : "");
-    div.innerText = i + 1;
-
-    div.onclick = () => {
-      currentSlide = i;
-      render();
-    };
-
-    timeline.appendChild(div);
-  });
-}
+};
 
 // DRAG
-function makeDraggable(el, index) {
-  let offsetX, offsetY;
+function makeDrag(el, i) {
+  el.onmousedown = e => {
+    let ox = e.clientX - el.offsetLeft;
+    let oy = e.clientY - el.offsetTop;
 
-  el.onmousedown = function(e) {
-    offsetX = e.clientX - el.offsetLeft;
-    offsetY = e.clientY - el.offsetTop;
+    document.onmousemove = e => {
+      el.style.left = (e.clientX - ox) + "px";
+      el.style.top = (e.clientY - oy) + "px";
 
-    document.onmousemove = function(e) {
-      el.style.left = (e.clientX - offsetX) + "px";
-      el.style.top = (e.clientY - offsetY) + "px";
-
-      slides[currentSlide][index].x = el.offsetLeft;
-      slides[currentSlide][index].y = el.offsetTop;
+      slides[currentSlide][i].x = el.offsetLeft;
+      slides[currentSlide][i].y = el.offsetTop;
     };
 
-    document.onmouseup = function() {
-      document.onmousemove = null;
-    };
+    document.onmouseup = () => document.onmousemove = null;
   };
 }
 
-// SAVE
-function saveProject() {
-  localStorage.setItem("trueline_project", JSON.stringify(slides));
-  alert("Saved!");
-}
-
-function loadProject() {
-  const data = localStorage.getItem("trueline_project");
-  if (!data) return alert("No project!");
-
-  slides = JSON.parse(data);
-  currentSlide = 0;
+// SLIDE
+window.newSlide = function() {
+  slides.push([]);
+  currentSlide = slides.length - 1;
   render();
+};
+
+function renderTimeline() {
+  let t = document.getElementById("timeline");
+  t.innerHTML = "";
+
+  slides.forEach((_, i) => {
+    let d = document.createElement("div");
+    d.className = "slide" + (i === currentSlide ? " active" : "");
+    d.innerText = i + 1;
+    d.onclick = () => { currentSlide = i; render(); };
+    t.appendChild(d);
+  });
 }
 
-// AUTO SAVE
-setInterval(() => {
-  localStorage.setItem("trueline_project", JSON.stringify(slides));
-}, 3000);
+// LOCAL
+window.saveProject = () => localStorage.setItem("t", JSON.stringify(slides));
+window.loadProject = () => { slides = JSON.parse(localStorage.getItem("t") || "[[]]"); render(); };
 
-// EXPORT PPT
-function exportPPT() {
+// 🔥 FIREBASE FUNCTION
+window.login = async function() {
+  const provider = new GoogleAuthProvider();
+  await signInWithPopup(auth, provider);
+};
+
+window.saveCloud = async function() {
+  const user = auth.currentUser;
+  if (!user) return alert("Login dulu!");
+
+  await setDoc(doc(db, "projects", user.uid), {
+    slides: slides
+  });
+
+  alert("Saved online!");
+};
+
+window.loadCloud = async function() {
+  const user = auth.currentUser;
+  if (!user) return alert("Login dulu!");
+
+  const snap = await getDoc(doc(db, "projects", user.uid));
+
+  if (snap.exists()) {
+    slides = snap.data().slides;
+    render();
+  }
+};
+
+// PPT
+window.exportPPT = function() {
   let pptx = new PptxGenJS();
-
-  slides.forEach(slideData => {
-    let slide = pptx.addSlide();
-
-    slideData.forEach(item => {
-      if (item.type === "image") {
-        slide.addImage({ path: item.src, x: item.x/100, y: item.y/100, w: 2 });
+  slides.forEach(s => {
+    let sl = pptx.addSlide();
+    s.forEach(i => {
+      if (i.type === "image") {
+        sl.addImage({ path: i.src, x: i.x/100, y: i.y/100, w: 2 });
       } else {
-        slide.addText(item.text, {
-          x: item.x/100,
-          y: item.y/100,
-          fontSize: item.size,
-          color: item.color.replace("#","")
-        });
+        sl.addText(i.text, { x: i.x/100, y: i.y/100 });
       }
     });
   });
-
   pptx.writeFile("trueline.pptx");
-}
+};
 
-// EXPORT VIDEO
+// VIDEO
 const { createFFmpeg, fetchFile } = FFmpeg;
 const ffmpeg = createFFmpeg({ log: true });
 
-async function exportVideo() {
-  alert("Processing...");
-
+window.exportVideo = async function() {
   await ffmpeg.load();
-
-  const canvasEl = document.getElementById("canvas");
-  const dataUrl = await html2canvas(canvasEl).then(c => c.toDataURL());
-
-  ffmpeg.FS('writeFile', 'frame.png', await fetchFile(dataUrl));
-
-  await ffmpeg.run('-loop','1','-i','frame.png','-t','3','output.mp4');
-
-  const data = ffmpeg.FS('readFile','output.mp4');
-  const url = URL.createObjectURL(new Blob([data.buffer]));
-
-  window.open(url);
-}
+  let dataUrl = await html2canvas(document.getElementById("canvas")).then(c => c.toDataURL());
+  ffmpeg.FS('writeFile','f.png',await fetchFile(dataUrl));
+  await ffmpeg.run('-loop','1','-i','f.png','-t','3','o.mp4');
+  let data = ffmpeg.FS('readFile','o.mp4');
+  window.open(URL.createObjectURL(new Blob([data.buffer])));
+};
 
 render();
 </script>
