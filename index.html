@@ -1,42 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trueline Login</title>
+  <title>Trueline Editor</title>
+
+  <style>
+    body { margin:0; display:flex; height:100vh; font-family:Arial; }
+    #sidebar { width:200px; background:#111; color:white; padding:10px; }
+    #canvas { flex:1; background:#eee; position:relative; }
+    .box { position:absolute; background:white; padding:5px; cursor:move; }
+  </style>
 </head>
-<body style="font-family:Arial; text-align:center; margin-top:100px;">
 
-  <h1>🎬 Trueline</h1>
-  <button onclick="loginGoogle()">Login dengan Google</button>
+<body>
 
-  <!-- FIREBASE + LOGIN -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
-    from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+<div id="sidebar">
+  <h3>Editor</h3>
+  <button onclick="addText()">+ Text</button>
+</div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAWqV29Xz1I4P0lYYEFzt1QV9wcUhfGqxM",
-      authDomain: "trueline-19ae3.firebaseapp.com",
-      projectId: "trueline-19ae3",
-      storageBucket: "trueline-19ae3.firebasestorage.app",
-      messagingSenderId: "753238069219",
-      appId: "1:753238069219:web:e182d8aec00e5843fe5ad6"
-    };
+<div id="canvas"></div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-    window.loginGoogle = async () => {
-      await signInWithPopup(auth, provider);
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAWqV29Xz1I4P0lYYEFzt1QV9wcUhfGqxM",
+    authDomain: "trueline-19ae3.firebaseapp.com",
+    projectId: "trueline-19ae3",
+    storageBucket: "trueline-19ae3.firebasestorage.app",
+    messagingSenderId: "753238069219",
+    appId: "1:753238069219:web:e182d8aec00e5843fe5ad6"
+  };
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "dashboard.html";
-      }
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const url = new URLSearchParams(window.location.search);
+  const id = url.get("id");
+
+  let project = { frames: [[]] };
+
+  async function load() {
+    const snap = await getDoc(doc(db, "projects", id));
+    if (snap.exists()) {
+      project = snap.data().data || project;
+      render();
+    }
+  }
+
+  window.addText = () => {
+    if (!project.frames[0]) project.frames[0] = [];
+
+    project.frames[0].push({
+      text: "Text",
+      x: 50,
+      y: 50
     });
-  </script>
+
+    save();
+    render();
+  };
+
+  function render() {
+    const canvas = document.getElementById("canvas");
+    canvas.innerHTML = "";
+
+    if (!project.frames[0]) return;
+
+    project.frames[0].forEach(t => {
+      let div = document.createElement("div");
+      div.className = "box";
+      div.innerText = t.text;
+      div.style.left = t.x + "px";
+      div.style.top = t.y + "px";
+
+      canvas.appendChild(div);
+    });
+  }
+
+  async function save() {
+    await setDoc(doc(db, "projects", id), {
+      data: project
+    });
+  }
+
+  load();
+</script>
 
 </body>
 </html>
