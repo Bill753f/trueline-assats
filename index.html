@@ -3,21 +3,16 @@
 <head>
   <title>Trueline Editor</title>
 
-  <!-- LIB -->
   <script src="https://unpkg.com/pptxgenjs/dist/pptxgen.bundle.js"></script>
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
 
   <style>
     body { margin:0; display:flex; height:100vh; background:#181818; color:white; font-family:Arial;}
     #sidebar { width:220px; background:#111; padding:15px;}
     button { width:100%; margin:5px 0; padding:10px; background:#333; color:white; border:none;}
     #canvas { flex:1; background:#222; position:relative;}
-    .text-box { position:absolute; background:white; color:black; padding:5px; resize:both;}
-    img { position:absolute; resize:both;}
-    #timeline { height:90px; background:#111; display:flex; padding:10px;}
+    .text-box { position:absolute; background:white; color:black; padding:5px;}
+    #timeline { height:80px; background:#111; display:flex; padding:10px;}
     .slide { width:60px; height:40px; background:#444; margin-right:5px; display:flex; align-items:center; justify-content:center;}
-    .active { background:#00aaff;}
   </style>
 </head>
 
@@ -26,22 +21,17 @@
 <div id="sidebar">
   <h3>🎬 Trueline</h3>
 
-  <div id="userStatus">Belum login</div>
+  <div id="status">Belum login</div>
 
-  <button id="loginBtn">Login</button>
+  <button id="loginBtn">Login Google</button>
+
+  <hr>
 
   <button id="addTextBtn">+ Text</button>
-  <button id="addImageBtn">+ Image</button>
   <button id="newSlideBtn">+ Slide</button>
 
-  <button id="saveLocalBtn">💾 Local Save</button>
-  <button id="loadLocalBtn">📂 Load</button>
-
-  <button id="saveCloudBtn">☁️ Save Online</button>
-  <button id="loadCloudBtn">☁️ Load Online</button>
-
-  <button id="exportPPTBtn">⬇ PPT</button>
-  <button id="exportVideoBtn">🎬 Video</button>
+  <button id="saveBtn">💾 Save Online</button>
+  <button id="loadBtn">📂 Load Online</button>
 </div>
 
 <div style="flex:1; display:flex; flex-direction:column;">
@@ -51,11 +41,9 @@
 
 <script type="module">
 
-console.log("Script jalan...");
-
-// 🔥 FIREBASE
+// 🔥 FIREBASE (VERSI STABIL)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -68,52 +56,30 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// LOGIN STATE
+// 🔥 LOGIN FIX (STABIL)
 let currentUser = null;
 
-onAuthStateChanged(auth, (user) => {
-  const status = document.getElementById("userStatus");
+document.getElementById("loginBtn").onclick = () => {
+  const provider = new GoogleAuthProvider();
+  signInWithRedirect(auth, provider);
+};
 
+onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user;
-    status.innerText = "Login: " + user.email;
-  } else {
-    currentUser = null;
-    status.innerText = "Belum login";
+    document.getElementById("status").innerText = "Login: " + user.email;
   }
 });
 
-// HANDLE REDIRECT
-getRedirectResult(auth).catch(err => console.error(err));
-
-// LOGIN BUTTON FIX
-document.getElementById("loginBtn").addEventListener("click", () => {
-  const provider = new GoogleAuthProvider();
-  signInWithRedirect(auth, provider);
-});
-
-// STATE
+// 🎬 EDITOR
 let slides = [[]];
 let currentSlide = 0;
 
-// RENDER
 function render() {
   const canvas = document.getElementById("canvas");
   canvas.innerHTML = "";
 
   slides[currentSlide].forEach((item, i) => {
-
-    if (item.type === "image") {
-      let img = document.createElement("img");
-      img.src = item.src;
-      img.style.left = item.x + "px";
-      img.style.top = item.y + "px";
-      img.style.width = item.width + "px";
-      makeDrag(img, i);
-      canvas.appendChild(img);
-      return;
-    }
-
     let div = document.createElement("div");
     div.className = "text-box";
     div.contentEditable = true;
@@ -123,23 +89,14 @@ function render() {
 
     div.oninput = () => slides[currentSlide][i].text = div.innerText;
 
-    makeDrag(div, i);
     canvas.appendChild(div);
   });
 
   renderTimeline();
 }
 
-// ADD BUTTONS
 document.getElementById("addTextBtn").onclick = () => {
   slides[currentSlide].push({ text: "edit", x: 50, y: 50 });
-  render();
-};
-
-document.getElementById("addImageBtn").onclick = () => {
-  let url = prompt("URL gambar:");
-  if (!url) return;
-  slides[currentSlide].push({ type: "image", src: url, x: 50, y: 50, width: 120 });
   render();
 };
 
@@ -149,91 +106,40 @@ document.getElementById("newSlideBtn").onclick = () => {
   render();
 };
 
-// DRAG
-function makeDrag(el, i) {
-  el.onmousedown = e => {
-    let ox = e.clientX - el.offsetLeft;
-    let oy = e.clientY - el.offsetTop;
-
-    document.onmousemove = e => {
-      el.style.left = (e.clientX - ox) + "px";
-      el.style.top = (e.clientY - oy) + "px";
-
-      slides[currentSlide][i].x = el.offsetLeft;
-      slides[currentSlide][i].y = el.offsetTop;
-    };
-
-    document.onmouseup = () => document.onmousemove = null;
-  };
-}
-
-// TIMELINE
 function renderTimeline() {
   let t = document.getElementById("timeline");
   t.innerHTML = "";
 
   slides.forEach((_, i) => {
     let d = document.createElement("div");
-    d.className = "slide" + (i === currentSlide ? " active" : "");
+    d.className = "slide";
     d.innerText = i + 1;
     d.onclick = () => { currentSlide = i; render(); };
     t.appendChild(d);
   });
 }
 
-// LOCAL
-document.getElementById("saveLocalBtn").onclick = () => {
-  localStorage.setItem("t", JSON.stringify(slides));
-};
-
-document.getElementById("loadLocalBtn").onclick = () => {
-  slides = JSON.parse(localStorage.getItem("t") || "[[]]");
-  render();
-};
-
-// CLOUD
-document.getElementById("saveCloudBtn").onclick = async () => {
+// ☁️ SAVE
+document.getElementById("saveBtn").onclick = async () => {
   if (!currentUser) return alert("Login dulu!");
-  await setDoc(doc(db, "projects", currentUser.uid), { slides });
-  alert("Saved online!");
+
+  await setDoc(doc(db, "projects", currentUser.uid), {
+    slides: slides
+  });
+
+  alert("Saved!");
 };
 
-document.getElementById("loadCloudBtn").onclick = async () => {
+// 📂 LOAD
+document.getElementById("loadBtn").onclick = async () => {
   if (!currentUser) return alert("Login dulu!");
+
   const snap = await getDoc(doc(db, "projects", currentUser.uid));
+
   if (snap.exists()) {
     slides = snap.data().slides;
     render();
   }
-};
-
-// PPT
-document.getElementById("exportPPTBtn").onclick = () => {
-  let pptx = new PptxGenJS();
-  slides.forEach(s => {
-    let sl = pptx.addSlide();
-    s.forEach(i => {
-      if (i.type === "image") {
-        sl.addImage({ path: i.src, x: i.x/100, y: i.y/100, w: 2 });
-      } else {
-        sl.addText(i.text, { x: i.x/100, y: i.y/100 });
-      }
-    });
-  });
-  pptx.writeFile("trueline.pptx");
-};
-
-// VIDEO
-const { createFFmpeg, fetchFile } = FFmpeg;
-const ffmpeg = createFFmpeg({ log: true });
-
-document.getElementById("exportVideoBtn").onclick = async () => {
-  await ffmpeg.load();
-  let dataUrl = await html2canvas(document.getElementById("canvas")).then(c => c.toDataURL());
-  ffmpeg.FS('writeFile','f.png',await fetchFile(dataUrl));
-  await ffmpeg.run('-loop','1','-i','f.png','-t','3','o.mp4');
-  let data = ffmpeg.FS('readFile','o.mp4');
-  window.open(URL.createObjectURL(new Blob([data.buffer])));
 };
 
 render();
