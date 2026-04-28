@@ -1,1 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trueline Editor</title>
 
+  <style>
+    body { margin:0; display:flex; height:100vh; font-family:Arial; }
+    #sidebar { width:200px; background:#111; color:white; padding:10px; }
+    #canvas { flex:1; background:#eee; position:relative; }
+    .box { position:absolute; background:white; padding:5px; cursor:move; }
+  </style>
+</head>
+
+<body>
+
+<div id="sidebar">
+  <h3>Editor</h3>
+  <button onclick="addText()">+ Text</button>
+</div>
+
+<div id="canvas"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const url = new URLSearchParams(window.location.search);
+  const id = url.get("id");
+
+  let project = { frames: [] };
+
+  async function load() {
+    const snap = await getDoc(doc(db, "projects", id));
+    if (snap.exists()) {
+      project = snap.data();
+      render();
+    }
+  }
+
+  function addText() {
+    if (!project.frames[0]) project.frames[0] = [];
+
+    project.frames[0].push({
+      text: "Edit text",
+      x: 50,
+      y: 50
+    });
+
+    save();
+    render();
+  }
+
+  function render() {
+    const canvas = document.getElementById("canvas");
+    canvas.innerHTML = "";
+
+    if (!project.frames[0]) return;
+
+    project.frames[0].forEach((t, i) => {
+      let div = document.createElement("div");
+      div.className = "box";
+      div.innerText = t.text;
+      div.style.left = t.x + "px";
+      div.style.top = t.y + "px";
+
+      canvas.appendChild(div);
+    });
+  }
+
+  async function save() {
+    await setDoc(doc(db, "projects", id), project);
+  }
+
+  load();
+
+  window.addText = addText;
+</script>
+
+</body>
+</html>
