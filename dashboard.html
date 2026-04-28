@@ -3,192 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRUELINE | Ultra-Creative Studio</title>
+    <title>TRUELINE | Ultra-Creative OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { background: radial-gradient(circle at top right, #0f172a, #000000); color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
+        :root { --accent: #3b82f6; --glass: rgba(255, 255, 255, 0.03); }
+        body { background: #000000; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
         
-        .sidebar { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.05); width: 280px; }
+        /* CapCut Slick Sidebar */
+        .sidebar { background: #0a0a0a; border-right: 1px solid rgba(255,255,255,0.05); width: 260px; }
 
-        /* Glass Cards Premium */
+        /* Premium Glass Card */
         .glass-card { 
-            background: rgba(255, 255, 255, 0.03); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
+            background: var(--glass); 
+            border: 1px solid rgba(255, 255, 255, 0.06); 
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
         }
         .glass-card:hover { 
-            background: rgba(255, 255, 255, 0.07); 
-            border-color: #3b82f6;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px -10px rgba(59, 130, 246, 0.4);
+            background: rgba(255, 255, 255, 0.08); 
+            border-color: var(--accent);
         }
 
-        /* Tombol 3D */
-        .btn-3d {
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-            box-shadow: 0 8px 15px -5px rgba(37, 99, 235, 0.4), inset 0 1px 1px rgba(255,255,255,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s;
+        /* CapCut Style Buttons & Interactions */
+        .nav-link { border-radius: 8px; color: #94a3b8; transition: 0.2s; }
+        .nav-link:active { transform: scale(0.95); }
+        .nav-link.active { background: #1e1e1e; color: #ffffff; font-weight: 700; }
+
+        .btn-premium {
+            background: #ffffff; color: #000000;
+            transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .btn-3d:hover { transform: scale(1.02); box-shadow: 0 12px 25px -5px rgba(37, 99, 235, 0.6); }
+        .btn-premium:active { transform: scale(0.92); opacity: 0.8; }
 
-        /* CapCut Style Tag */
-        .tag-premium {
-            background: linear-gradient(90deg, #fbbf24, #f59e0b);
-            color: black;
-            font-size: 8px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 4px;
-            text-transform: uppercase;
+        /* Smooth Section Transitions */
+        .content-section { display: none; opacity: 0; }
+        .content-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar CapCut Style */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        /* CapCut Badge */
+        .badge-pro {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            color: black; font-size: 7px; font-weight: 900; padding: 1px 4px; border-radius: 3px;
         }
-
-        .nav-link.active { background: rgba(59, 130, 246, 0.1); color: #3b82f6; font-weight: 800; border-right: 3px solid #3b82f6; }
-
-        .content-section { display: none; }
-        .content-section.active { display: block; animation: slideUp 0.5s ease forwards; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Image Placeholder Style */
-        .img-placeholder { background-color: #1a1a1a; background-position: center; background-size: cover; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden text-[13px]">
+<body class="flex h-screen overflow-hidden text-[12.5px]">
 
     <aside class="sidebar flex flex-col shrink-0">
-        <div class="p-8">
-            <h1 class="text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">TRUELINE</h1>
-            <p class="text-[9px] font-bold text-gray-600 tracking-[0.3em] mt-1 uppercase">Creative OS</p>
+        <div class="p-6">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-black italic">T</div>
+                <h1 class="text-xl font-black italic tracking-tighter uppercase">Trueline</h1>
+            </div>
+            
+            <nav class="space-y-1">
+                <p class="text-[10px] font-bold text-gray-600 uppercase mb-3 px-3 tracking-widest">Utama</p>
+                <button onclick="showPage('home', this)" class="nav-link active w-full flex items-center space-x-3 px-4 py-2.5">
+                    <span class="text-lg text-blue-500">🏠</span> <span class="tracking-tight font-semibold">Beranda</span>
+                </button>
+                <button onclick="showPage('video', this)" class="nav-link w-full flex items-center space-x-3 px-4 py-2.5 hover:bg-white/5">
+                    <span class="text-lg">🎬</span> <span class="tracking-tight font-semibold">Template Video</span>
+                </button>
+                <button onclick="showPage('audio', this)" class="nav-link w-full flex items-center space-x-3 px-4 py-2.5 hover:bg-white/5">
+                    <span class="text-lg">🎵</span> <span class="tracking-tight font-semibold">Studio Suara</span>
+                </button>
+                <button onclick="showPage('canva', this)" class="nav-link w-full flex items-center space-x-3 px-4 py-2.5 hover:bg-white/5">
+                    <span class="text-lg">🎨</span> <span class="tracking-tight font-semibold">Aset Grafis</span>
+                </button>
+                <button onclick="showPage('ppt', this)" class="nav-link w-full flex items-center space-x-3 px-4 py-2.5 hover:bg-white/5">
+                    <span class="text-lg">📊</span> <span class="tracking-tight font-semibold">Presentasi</span>
+                </button>
+                <button onclick="showPage('ai', this)" class="nav-link w-full flex items-center space-x-3 px-4 py-2.5 hover:bg-white/5">
+                    <span class="text-lg">🤖</span> <span class="tracking-tight font-semibold">AI Generated</span>
+                </button>
+            </nav>
         </div>
-        
-        <nav class="flex-1 px-4 space-y-1">
-            <button onclick="showPage('home', this)" class="nav-link active w-full flex items-center space-x-4 px-5 py-3 rounded-xl transition">
-                <span>🏠</span> <span class="font-bold text-xs uppercase tracking-wider">Home</span>
-            </button>
-            <button onclick="showPage('video', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3 rounded-xl text-gray-500 hover:bg-white/5 transition">
-                <span>🎬</span> <span class="font-bold text-xs uppercase tracking-wider">Video Templates</span>
-            </button>
-            <button onclick="showPage('canva', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3 rounded-xl text-gray-500 hover:bg-white/5 transition">
-                <span>🎨</span> <span class="font-bold text-xs uppercase tracking-wider">Canva Designs</span>
-            </button>
-            <button onclick="showPage('ppt', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3 rounded-xl text-gray-500 hover:bg-white/5 transition">
-                <span>📊</span> <span class="font-bold text-xs uppercase tracking-wider">PPT Pitch Deck</span>
-            </button>
-            <button onclick="showPage('ai', this)" class="nav-link w-full flex items-center space-x-4 px-5 py-3 rounded-xl text-gray-500 hover:bg-white/5 transition">
-                <span>🤖</span> <span class="font-bold text-xs uppercase tracking-wider">AI Generated</span>
-            </button>
-        </nav>
 
-        <div class="p-6 mt-auto border-t border-white/5">
-            <button class="w-full py-3 rounded-xl bg-white/5 text-[10px] font-black tracking-widest hover:bg-white/10 transition uppercase border border-white/5">Settings</button>
+        <div class="mt-auto p-6 bg-gradient-to-t from-black to-transparent">
+            <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                <p class="text-[9px] font-bold text-blue-400 uppercase mb-2 italic">Founder Status</p>
+                <p class="font-bold text-xs">TRUELINE OS V2.0</p>
+            </div>
         </div>
     </aside>
 
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col bg-[#0f0f0f]">
         
-        <header class="h-20 flex items-center justify-between px-10 bg-black/40 backdrop-blur-xl z-10 border-b border-white/5">
-            <h2 id="pageTitle" class="text-lg font-black uppercase tracking-tighter">Studio Home</h2>
-            <div class="flex items-center space-x-6">
-                <div class="relative w-64 group">
-                    <input type="text" placeholder="Search templates..." class="w-full bg-white/5 border border-white/10 rounded-full py-2 px-4 text-[11px] outline-none focus:border-blue-500 transition">
-                </div>
-                <button class="btn-3d px-6 py-2 rounded-full text-white font-black text-[10px] tracking-widest uppercase">+ New Project</button>
+        <header class="h-14 flex items-center justify-between px-8 bg-[#0a0a0a] border-b border-white/5">
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-500">Search</span>
+                <input type="text" placeholder="Cari template atau proyek..." class="bg-transparent border-none outline-none w-64 text-xs">
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-1.5 rounded-lg text-gray-400 hover:text-white transition font-semibold">Masukan</button>
+                <button class="btn-premium px-6 py-1.5 rounded-md font-bold text-[11px] uppercase tracking-wide">Mulai Proyek Baru</button>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-10">
+        <main class="flex-1 overflow-y-auto p-8">
             
             <section id="home" class="content-section active">
-                <div class="glass-card p-12 mb-10 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200')] bg-cover bg-center">
-                    <div class="backdrop-blur-sm bg-black/20 p-8 rounded-3xl inline-block border border-white/10">
-                        <h1 class="text-4xl font-black mb-2 italic tracking-tighter">THE FUTURE OF <br>PRODUCTION.</h1>
-                        <p class="text-gray-200 text-xs mb-6 opacity-80">Empowering culinary & tech creators in Lombok Barat.</p>
-                        <button onclick="showPage('video')" class="bg-white text-black px-8 py-3 rounded-full font-black text-[10px] uppercase hover:bg-blue-400 transition">Explore Templates</button>
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl font-black italic tracking-tighter">Beranda</h2>
+                    <p class="text-gray-500 font-bold uppercase text-[10px] tracking-widest">29 April 2026</p>
+                </div>
+
+                <div class="mb-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="font-bold text-gray-400 uppercase text-[10px] tracking-widest">Proyek Terakhir Saya</p>
+                        <button class="text-blue-500 hover:underline text-[10px] font-bold">Lihat Semua</button>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="glass-card p-4 flex flex-col group cursor-pointer">
+                            <div class="aspect-video bg-gray-900 rounded-lg mb-3 flex items-center justify-center border border-white/5 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            </div>
+                            <p class="font-bold text-xs truncate">Review_Trueline_Culinary.mp4</p>
+                            <p class="text-[9px] text-gray-500 mt-1 uppercase">Diedit 2 jam yang lalu</p>
+                        </div>
+                        <div class="glass-card p-4 flex flex-col group cursor-pointer">
+                            <div class="aspect-video bg-gray-900 rounded-lg mb-3 flex items-center justify-center border border-white/5 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            </div>
+                            <p class="font-bold text-xs truncate">Pitch_Deck_Q2_2026.pptx</p>
+                            <p class="text-[9px] text-gray-500 mt-1 uppercase">Diedit 1 hari yang lalu</p>
+                        </div>
+                        <div class="glass-card p-4 border-dashed border-2 flex items-center justify-center text-gray-600 hover:text-white transition">
+                            <span class="font-black">+ BUAT BARU</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-4 gap-4">
-                    <div class="glass-card p-6 flex flex-col items-center text-center">
-                        <span class="text-2xl mb-2">🎬</span>
-                        <p class="font-bold text-[10px] uppercase">1,204 Video</p>
+                <div class="grid grid-cols-5 gap-4">
+                    <div onclick="showPage('video')" class="glass-card p-6 text-center hover:bg-blue-600/20 group cursor-pointer transition">
+                        <span class="text-3xl block mb-2">🎬</span>
+                        <span class="font-black text-[10px] uppercase">Edit Video</span>
                     </div>
-                    <div class="glass-card p-6 flex flex-col items-center text-center">
-                        <span class="text-2xl mb-2">🎨</span>
-                        <p class="font-bold text-[10px] uppercase">850 Canva</p>
+                    <div onclick="showPage('audio')" class="glass-card p-6 text-center hover:bg-purple-600/20 group cursor-pointer transition">
+                        <span class="text-3xl block mb-2">🎵</span>
+                        <span class="font-black text-[10px] uppercase">Studio Musik</span>
                     </div>
-                    <div class="glass-card p-6 flex flex-col items-center text-center">
-                        <span class="text-2xl mb-2">📊</span>
-                        <p class="font-bold text-[10px] uppercase">320 PPT</p>
+                    <div onclick="showPage('ai')" class="glass-card p-6 text-center hover:bg-green-600/20 group cursor-pointer transition">
+                        <span class="text-3xl block mb-2">🤖</span>
+                        <span class="font-black text-[10px] uppercase">AI Magic</span>
                     </div>
-                    <div class="glass-card p-6 flex flex-col items-center text-center">
-                        <span class="text-2xl mb-2">🤖</span>
-                        <p class="font-bold text-[10px] uppercase">AI Ready</p>
+                    </div>
+            </section>
+
+            <section id="audio" class="content-section">
+                <div class="flex justify-between items-end mb-8">
+                    <h2 class="text-3xl font-black tracking-tighter uppercase italic">Studio Suara & Musik</h2>
+                    <div class="flex space-x-2">
+                        <button class="bg-blue-600 px-4 py-1.5 rounded text-[10px] font-bold">LIBRARY MUSIK</button>
+                        <button class="bg-white/5 px-4 py-1.5 rounded text-[10px] font-bold border border-white/10">VOICE OVER AI</button>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-8 mb-8 bg-gradient-to-r from-blue-900/20 to-purple-900/20 flex items-center justify-between">
+                    <div class="flex items-center space-x-6">
+                        <div class="flex space-x-1">
+                            <div class="w-1 h-8 bg-blue-500 animate-pulse"></div>
+                            <div class="w-1 h-12 bg-blue-500 animate-pulse delay-75"></div>
+                            <div class="w-1 h-6 bg-blue-500 animate-pulse delay-150"></div>
+                            <div class="w-1 h-10 bg-blue-500 animate-pulse delay-300"></div>
+                        </div>
+                        <div>
+                            <p class="font-black text-lg italic uppercase">Generasi Musik Otomatis</p>
+                            <p class="text-xs text-gray-400">Buat musik latar original bebas hak cipta dalam hitungan detik.</p>
+                        </div>
+                    </div>
+                    <button class="btn-premium px-8 py-3 rounded-lg font-black text-[10px] uppercase">BUAT MUSIK SEKARANG</button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="glass-card p-4 flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-xl">🎤</div>
+                        <div class="flex-1">
+                            <p class="font-bold">AI Voice Dubbing</p>
+                            <p class="text-[9px] text-gray-500">12 Suara Premium Tersedia</p>
+                        </div>
+                        <button class="text-[10px] font-bold text-blue-500">COBA</button>
+                    </div>
+                    <div class="glass-card p-4 flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-xl">✂️</div>
+                        <div class="flex-1">
+                            <p class="font-bold">Pembersih Suara</p>
+                            <p class="text-[9px] text-gray-500">Hapus noise latar belakang instan</p>
+                        </div>
+                        <button class="text-[10px] font-bold text-blue-500">COBA</button>
                     </div>
                 </div>
             </section>
 
             <section id="video" class="content-section">
-                <div class="flex justify-between items-end mb-8">
-                    <h2 class="text-3xl font-black tracking-tighter uppercase italic">Video Templates</h2>
-                    <div class="flex space-x-2">
-                        <button class="px-4 py-1.5 rounded-full bg-blue-600 text-[10px] font-bold">Trending</button>
-                        <button class="px-4 py-1.5 rounded-full bg-white/5 text-[10px] font-bold hover:bg-white/10">Newest</button>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    <div class="glass-card group cursor-pointer">
-                        <div class="aspect-[9/16] img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1492691523567-6170c28ec362?q=80&w=300')">
-                            <div class="p-3"><span class="tag-premium italic">Premium</span></div>
-                        </div>
-                        <div class="p-3">
-                            <p class="font-bold text-[10px] truncate">Cinematic Food v1</p>
-                            <p class="text-[9px] text-gray-500 mt-1 uppercase">12.5k Used</p>
-                        </div>
-                    </div>
-                    </div>
-            </section>
-
-            <section id="canva" class="content-section">
-                <h2 class="text-3xl font-black tracking-tighter uppercase italic mb-8">Canva Assets</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div class="glass-card aspect-square img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=500')">
-                        <div class="w-full h-full bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-sm">
-                            <span class="font-black text-[10px] uppercase tracking-widest border-2 px-4 py-2">Use Design</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="ppt" class="content-section">
-                <h2 class="text-3xl font-black tracking-tighter uppercase italic mb-8">Professional Deck</h2>
-                <div class="grid grid-cols-1 gap-4">
-                    <div class="glass-card p-6 flex items-center justify-between group">
-                        <div class="flex items-center space-x-6">
-                            <div class="w-14 h-14 bg-gradient-to-br from-orange-400 to-red-600 rounded-xl flex items-center justify-center font-black italic">PPT</div>
-                            <div>
-                                <h3 class="font-black text-sm group-hover:text-blue-400 transition">Culinary Business Pitch 2026</h3>
-                                <p class="text-[10px] text-gray-500 uppercase mt-1">25 Slides • Modern Aesthetic</p>
+                <h2 class="text-3xl font-black tracking-tighter uppercase italic mb-8">Template Video</h2>
+                <div class="grid grid-cols-5 gap-4">
+                    <div class="glass-card group cursor-pointer overflow-hidden">
+                        <div class="aspect-[9/16] bg-gray-900 relative">
+                            <div class="absolute top-2 left-2 z-10"><span class="badge-pro italic uppercase">PRO</span></div>
+                            <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=300" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-3 opacity-0 group-hover:opacity-100 transition">
+                                <button class="w-full bg-white text-black py-2 rounded font-black text-[9px] uppercase">Gunakan</button>
                             </div>
                         </div>
-                        <button class="bg-white/5 border border-white/10 px-6 py-2 rounded-full font-black text-[10px] uppercase hover:bg-white/10">Download</button>
-                    </div>
-                </div>
-            </section>
-
-            <section id="ai" class="content-section">
-                <h2 class="text-3xl font-black tracking-tighter uppercase italic mb-4">AI Magic Wall</h2>
-                <p class="text-gray-500 text-xs mb-8">Hasil automasi Meta-Orchestrator OS v2.0</p>
-                <div class="grid grid-cols-3 gap-6">
-                    <div class="glass-card p-1 border-blue-500/30">
-                        <div class="aspect-video bg-gradient-to-br from-blue-900 to-black rounded-xl overflow-hidden flex items-center justify-center">
-                             <div class="text-center">
-                                 <div class="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                                 <p class="text-[9px] font-bold uppercase tracking-widest">Generating Asset...</p>
-                             </div>
+                        <div class="p-2.5">
+                            <p class="font-bold text-[10px] truncate">Food Cinematic SlowMo</p>
+                            <p class="text-[9px] text-gray-500 mt-0.5">8.2k Digunakan</p>
                         </div>
                     </div>
                 </div>
@@ -199,22 +225,15 @@
 
     <script>
         function showPage(pageId, element) {
+            // Animasi transisi section
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
+            const target = document.getElementById(pageId);
+            target.classList.add('active');
             
-            const titles = {
-                'home': 'Studio Home',
-                'video': 'Video Marketplace',
-                'canva': 'Canva Ecosystem',
-                'ppt': 'Pitch Deck Pro',
-                'ai': 'AI Orchestration'
-            };
-            document.getElementById('pageTitle').innerText = titles[pageId];
-
+            // Sidebar active state
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             
             if(!element) {
-                // Find matching sidebar button if call comes from inside home cards
                 document.querySelectorAll('.nav-link').forEach(btn => {
                     if(btn.getAttribute('onclick').includes(pageId)) btn.classList.add('active');
                 });
