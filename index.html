@@ -11,8 +11,10 @@
     button { width:100%; margin:5px 0; padding:10px; background:#333; color:white; border:none;}
     #canvas { flex:1; background:#222; position:relative;}
     .text-box { position:absolute; background:white; color:black; padding:5px;}
+    img { position:absolute; }
     #timeline { height:80px; background:#111; display:flex; padding:10px;}
     .slide { width:60px; height:40px; background:#444; margin-right:5px; display:flex; align-items:center; justify-content:center;}
+    .active { background:#00aaff;}
   </style>
 </head>
 
@@ -28,10 +30,8 @@
   <hr>
 
   <button id="addTextBtn">+ Text</button>
+  <button id="addImageBtn">+ Image</button>
   <button id="newSlideBtn">+ Slide</button>
-
-  <button id="saveBtn">💾 Save Online</button>
-  <button id="loadBtn">📂 Load Online</button>
 </div>
 
 <div style="flex:1; display:flex; flex-direction:column;">
@@ -64,42 +64,79 @@ const db = getFirestore(app);
 let currentUser = null;
 const status = document.getElementById("status");
 
-// 🔥 LOGIN POPUP FIX
+// 🔥 LOGIN
 document.getElementById("loginBtn").onclick = async () => {
-  try {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
+  const provider = new GoogleAuthProvider();
+  const result = await signInWithPopup(auth, provider);
 
-    currentUser = result.user;
-    status.innerText = "Login: " + result.user.email;
-
-  } catch (err) {
-    console.error("Login error:", err);
-    alert("Login gagal, cek console (F12)");
-  }
+  currentUser = result.user;
+  status.innerText = "Login: " + result.user.email;
 };
 
-// 🔥 MONITOR LOGIN (backup)
-onAuthStateChanged(auth, (user) => {
-  console.log("AUTH:", user);
-
+// 🔥 AUTO LOAD + MONITOR
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
     status.innerText = "Login: " + user.email;
+
+    const snap = await getDoc(doc(db, "projects", user.uid));
+    if (snap.exists()) {
+      slides = snap.data().slides;
+      render();
+    }
   } else {
     status.innerText = "Belum login";
   }
 });
 
-// 🎬 EDITOR
+// 🎬 STATE
 let slides = [[]];
 let currentSlide = 0;
 
+// 🔥 AUTO SAVE
+function autoSave() {
+  if (!currentUser) return;
+  setDoc(doc(db, "projects", currentUser.uid), { slides });
+}
+
+// 🖱️ DRAG
+function makeDrag(el, i) {
+  el.onmousedown = e => {
+    let ox = e.clientX - el.offsetLeft;
+    let oy = e.clientY - el.offsetTop;
+
+    document.onmousemove = e => {
+      el.style.left = (e.clientX - ox) + "px";
+      el.style.top = (e.clientY - oy) + "px";
+
+      slides[currentSlide][i].x = el.offsetLeft;
+      slides[currentSlide][i].y = el.offsetTop;
+      autoSave();
+    };
+
+    document.onmouseup = () => document.onmousemove = null;
+  };
+}
+
+// 🎨 RENDER
 function render() {
   const canvas = document.getElementById("canvas");
   canvas.innerHTML = "";
 
   slides[currentSlide].forEach((item, i) => {
+
+    if (item.type === "image") {
+      let img = document.createElement("img");
+      img.src = item.src;
+      img.style.left = item.x + "px";
+      img.style.top = item.y + "px";
+      img.style.width = item.width + "px";
+
+      makeDrag(img, i);
+      canvas.appendChild(img);
+      return;
+    }
+
     let div = document.createElement("div");
     div.className = "text-box";
     div.contentEditable = true;
@@ -107,54 +144,63 @@ function render() {
     div.style.left = item.x + "px";
     div.style.top = item.y + "px";
 
-    div.oninput = () => slides[currentSlide][i].text = div.innerText;
+    div.oninput = () => {
+      slides[currentSlide][i].text = div.innerText;
+      autoSave();
+    };
 
+    makeDrag(div, i);
     canvas.appendChild(div);
   });
 
   renderTimeline();
 }
 
+// ➕ TEXT
 document.getElementById("addTextBtn").onclick = () => {
   slides[currentSlide].push({ text: "edit", x: 50, y: 50 });
   render();
+  autoSave();
 };
 
+// 🖼️ IMAGE
+document.getElementById("addImageBtn").onclick = () => {
+  let url = prompt("URL gambar:");
+  if (!url) return;
+
+  slides[currentSlide].push({
+    type: "image",
+    src: url,
+    x: 50,
+    y: 50,
+    width: 120
+  });
+
+  render();
+  autoSave();
+};
+
+// ➕ SLIDE
 document.getElementById("newSlideBtn").onclick = () => {
   slides.push([]);
   currentSlide = slides.length - 1;
   render();
+  autoSave();
 };
 
+// 🎞️ TIMELINE
 function renderTimeline() {
   let t = document.getElementById("timeline");
   t.innerHTML = "";
 
   slides.forEach((_, i) => {
     let d = document.createElement("div");
-    d.className = "slide";
+    d.className = "slide" + (i === currentSlide ? " active" : "");
     d.innerText = i + 1;
     d.onclick = () => { currentSlide = i; render(); };
     t.appendChild(d);
   });
 }
-
-// ☁️ SAVE
-document.getElementById("saveBtn").onclick = async () => {
-  if (!currentUser) return alert("Login dulu!");
-  await setDoc(doc(db, "projects", currentUser.uid), { slides });
-  alert("Saved!");
-};
-
-// 📂 LOAD
-document.getElementById("loadBtn").onclick = async () => {
-  if (!currentUser) return alert("Login dulu!");
-  const snap = await getDoc(doc(db, "projects", currentUser.uid));
-  if (snap.exists()) {
-    slides = snap.data().slides;
-    render();
-  }
-};
 
 render();
 
