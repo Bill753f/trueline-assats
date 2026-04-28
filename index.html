@@ -3,188 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRUELINE | Professional Creative Suite</title>
+    <title>TRUELINE OS v2.0 | Professional Creative & Enterprise Suite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --video: #3b82f6; --design: #ec4899; --slide: #f97316; --gold: #fbbf24; }
-        body { background-color: #000; color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; height: 100vh; }
+        :root { 
+            --video: #3b82f6; 
+            --design: #ec4899; 
+            --slide: #f97316; 
+            --gold: #fbbf24; 
+            --danger: #ef4444;
+        }
         
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        body { 
+            background-color: #000; 
+            color: white; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            overflow: hidden; 
+            height: 100vh; 
+            margin: 0;
+        }
+        
+        /* Glassmorphism Core */
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .nav-link { transition: 0.3s; border-radius: 12px; cursor: pointer; color: #94a3b8; }
         .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
         .nav-link.active { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border-left: 4px solid #3b82f6; }
 
-        /* CapCut Style Timeline */
-        .timeline-track { background: repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.05) 40px); }
-        .playhead { width: 2px; height: 100%; background: #ef4444; position: absolute; left: 30%; z-index: 20; box-shadow: 0 0 10px #ef4444; }
+        /* CapCut Style Timeline Engines */
+        .timeline-track { 
+            background: repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.03) 40px); 
+            scrollbar-width: thin;
+            scrollbar-color: #333 transparent;
+        }
+        .playhead { 
+            width: 2px; 
+            height: 100%; 
+            background: #ef4444; 
+            position: absolute; 
+            left: 150px; 
+            z-index: 50; 
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); 
+            pointer-events: none;
+        }
 
-        /* Animation & Transition */
-        .page-entry { animation: slideUp 0.4s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--video); }
+
+        /* Layout & Animation */
+        .page-entry { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        section { display: none; height: 100%; }
+        section { display: none; height: 100%; width: 100%; }
         section.active { display: flex; flex-direction: column; }
         
         .canvas-bg { background-image: radial-gradient(#222 1px, transparent 1px); background-size: 20px 20px; }
-        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px; color: white; outline: none; }
+        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px 12px; color: white; outline: none; font-size: 12px; }
+        input:focus { border-color: var(--video); }
+
+        .track-item { cursor: pointer; transition: filter 0.2s; }
+        .track-item:hover { filter: brightness(1.2); }
     </style>
 </head>
 <body>
 
     <div class="flex h-screen w-full overflow-hidden">
         
-        <aside class="w-64 border-r border-white/10 bg-[#050505] flex flex-col p-6 shrink-0">
+        <aside class="w-64 border-r border-white/10 bg-[#050505] flex flex-col p-6 shrink-0 z-50">
             <div class="mb-10 flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-xl italic">T</div>
-                <h1 class="font-black text-xl tracking-tighter uppercase italic">TRUELINE</h1>
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-xl italic shadow-lg shadow-blue-600/20">T</div>
+                <div>
+                    <h1 class="font-black text-xl tracking-tighter uppercase italic leading-none">TRUELINE</h1>
+                    <span class="text-[8px] text-blue-500 font-bold tracking-[0.2em]">PRODUCTION OS</span>
+                </div>
             </div>
 
-            <nav class="space-y-2 flex-1">
-                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Production</p>
+            <nav class="space-y-1 flex-1">
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 opacity-50">Studio Engine</p>
                 <div onclick="switchPage('video', this)" class="nav-link active p-3 flex items-center gap-3 text-sm font-semibold"><span>🎬</span> Video Editor</div>
                 <div onclick="switchPage('design', this)" class="nav-link p-3 flex items-center gap-3 text-sm font-semibold"><span>🎨</span> Graphic Hub</div>
                 <div onclick="switchPage('slides', this)" class="nav-link p-3 flex items-center gap-3 text-sm font-semibold"><span>📊</span> Presentation</div>
                 
                 <div class="mt-8"></div>
-                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Enterprise</p>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 opacity-50">Enterprise</p>
                 <div onclick="switchPage('culinary', this)" class="nav-link p-3 flex items-center gap-3 text-sm font-semibold"><span>🍳</span> Culinary Biz</div>
                 <div onclick="switchPage('founder', this)" class="nav-link p-3 flex items-center gap-3 text-sm font-semibold"><span>👑</span> Founder Panel</div>
             </nav>
 
-            <div class="p-4 glass rounded-2xl">
-                <p class="text-[10px] text-gray-400">Status</p>
-                <p class="text-xs font-bold text-green-500">System Ready (v2.0)</p>
+            <div class="p-4 glass rounded-2xl bg-gradient-to-br from-blue-600/10 to-transparent">
+                <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">System Status</p>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <p class="text-xs font-bold text-green-500">v2.0 Stable Edition</p>
+                </div>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col min-w-0 bg-[#0a0a0a]">
+        <main class="flex-1 flex flex-col min-w-0 bg-[#080808]">
             
-            <header class="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-black/50 backdrop-blur-xl">
+            <header class="h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/40 backdrop-blur-2xl z-40">
                 <div class="flex items-center gap-4">
-                    <span id="moduleTag" class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Video Suite</span>
-                    <h2 id="currentModule" class="font-bold text-sm text-gray-300">Project: Untitled_Production_01</h2>
+                    <span id="moduleTag" class="bg-blue-600/20 text-blue-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border border-blue-500/20">Video Suite</span>
+                    <h2 id="currentModule" class="font-bold text-sm text-gray-400">Editing: Promo_Trueline_Lombok.mp4</h2>
                 </div>
-                <button class="bg-white text-black px-5 py-2 rounded-lg text-xs font-black uppercase hover:bg-blue-500 transition">Export Project</button>
+                <div class="flex items-center gap-3">
+                    <div class="flex -space-x-2 mr-4">
+                        <div class="w-7 h-7 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center text-[10px]">A</div>
+                        <div class="w-7 h-7 rounded-full border-2 border-black bg-blue-600 flex items-center justify-center text-[10px]">T</div>
+                    </div>
+                    <button class="bg-white text-black px-5 py-2 rounded-lg text-xs font-black uppercase hover:bg-blue-500 hover:text-white transition-all shadow-lg">Export</button>
+                </div>
             </header>
 
-            <div class="flex-1 relative overflow-hidden p-6">
+            <div class="flex-1 relative overflow-hidden">
 
-                <section id="video" class="active page-entry">
-                    <div class="flex-1 flex gap-4 mb-4">
-                        <div class="w-72 glass rounded-2xl flex flex-col overflow-hidden">
-                            <div class="p-4 border-b border-white/5 font-bold text-xs uppercase tracking-tighter">Media Assets</div>
-                            <div class="p-4 grid grid-cols-2 gap-2 overflow-y-auto">
-                                <div class="aspect-square glass rounded border border-white/10 hover:border-blue-500 transition cursor-pointer flex items-center justify-center text-xs">Clip 1</div>
-                                <div class="aspect-square glass rounded border border-white/10 hover:border-blue-500 transition cursor-pointer flex items-center justify-center text-xs">Clip 2</div>
+                <section id="video" class="active page-entry flex flex-col h-full">
+                    <div class="flex-1 flex gap-1 p-1 min-h-0 overflow-hidden">
+                        <div class="w-72 glass flex flex-col shrink-0 rounded-l-xl">
+                            <div class="flex border-b border-white/5">
+                                <button class="flex-1 p-3 text-[10px] font-bold border-b-2 border-blue-500">Media</button>
+                                <button class="flex-1 p-3 text-[10px] font-bold text-gray-500">Audio</button>
+                                <button class="flex-1 p-3 text-[10px] font-bold text-gray-500">Text</button>
+                            </div>
+                            <div class="p-3 grid grid-cols-2 gap-2 overflow-y-auto">
+                                <div class="aspect-video bg-white/5 rounded border border-white/10 hover:border-blue-500 transition cursor-pointer overflow-hidden relative group">
+                                    <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=200" class="w-full h-full object-cover opacity-60 group-hover:opacity-100">
+                                    <span class="absolute bottom-1 right-1 text-[8px] bg-black/60 px-1">0:12</span>
+                                </div>
+                                <div class="aspect-video bg-white/5 rounded border border-white/10 hover:border-blue-500 transition cursor-pointer flex items-center justify-center text-[10px] text-gray-500 italic">Import +</div>
                             </div>
                         </div>
-                        <div class="flex-1 glass rounded-2xl flex flex-col overflow-hidden bg-black relative">
-                            <div class="flex-1 flex items-center justify-center">
-                                <div class="w-4/5 aspect-video bg-[#111] rounded shadow-2xl flex items-center justify-center border border-white/5">
-                                    <button class="text-5xl opacity-50 hover:opacity-100 transition">▶</button>
+
+                        <div class="flex-1 bg-black relative flex flex-col items-center justify-center border-x border-white/5">
+                            <div class="w-full max-w-3xl aspect-video bg-[#000] shadow-2xl border border-white/10 relative group">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <button class="w-16 h-16 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md flex items-center justify-center text-2xl transition-all border border-white/20">▶</button>
+                                </div>
+                                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4 bg-black/60 backdrop-blur px-4 py-2 rounded-full border border-white/10">
+                                    <button class="text-xs">⏮</button>
+                                    <button class="text-xs">⏸</button>
+                                    <button class="text-xs">⏭</button>
                                 </div>
                             </div>
-                            <div class="h-12 border-t border-white/5 flex items-center justify-center gap-6">
-                                <span class="text-xs text-gray-500">00:00 / 01:30</span>
-                                <div class="flex gap-4"><span>⏪</span> <span>⏸</span> <span>⏩</span></div>
-                                <span class="text-xs text-gray-500">1080p 60fps</span>
+                        </div>
+
+                        <div class="w-72 glass p-4 shrink-0 rounded-r-xl">
+                            <h4 class="text-[10px] font-black uppercase text-gray-500 mb-6 tracking-widest">Video Inspector</h4>
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="text-[10px] block mb-2 opacity-50">Transform Scale</label>
+                                    <input type="range" class="w-full accent-blue-600">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] block mb-2 opacity-50">Opacity</label>
+                                    <input type="range" class="w-full accent-blue-600">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] block mb-2 opacity-50">Blend Mode</label>
+                                    <select class="w-full">
+                                        <option>Normal</option>
+                                        <option>Screen</option>
+                                        <option>Overlay</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="h-48 glass rounded-2xl overflow-hidden flex flex-col">
-                        <div class="h-8 border-b border-white/5 flex items-center px-4 gap-2">
-                            <button class="text-[10px] bg-white/10 px-2 py-1 rounded">✂️ Split</button>
-                            <button class="text-[10px] bg-white/10 px-2 py-1 rounded">🗑️ Delete</button>
+
+                    <div class="h-72 glass border-t border-white/10 flex flex-col shrink-0">
+                        <div class="h-10 border-b border-white/5 flex items-center justify-between px-4">
+                            <div class="flex gap-4">
+                                <button class="text-[10px] font-bold text-blue-500">✂️ SPLIT</button>
+                                <button class="text-[10px] font-bold text-gray-500">🗑️ DELETE</button>
+                            </div>
+                            <span class="font-mono text-[10px] text-blue-500">00:00:15:24 / 00:01:30:00</span>
                         </div>
                         <div class="flex-1 relative overflow-x-auto timeline-track">
                             <div class="playhead"></div>
-                            <div class="p-4 space-y-2 min-w-[1500px]">
-                                <div class="h-10 bg-blue-600/30 border border-blue-500/50 rounded-lg w-[500px] ml-10 flex items-center px-3 text-[10px] font-bold">Lombok_B-Roll.mp4</div>
-                                <div class="h-8 bg-green-600/30 border border-green-500/50 rounded-lg w-[700px] ml-20 flex items-center px-3 text-[10px] font-bold italic">Background_Vibe.mp3</div>
+                            <div class="p-4 space-y-2 min-w-[2000px]">
+                                <div class="h-4 flex border-b border-white/5 mb-4 opacity-20">
+                                    <div class="w-40 border-l border-white pl-1 text-[8px]">00s</div>
+                                    <div class="w-40 border-l border-white pl-1 text-[8px]">05s</div>
+                                    <div class="w-40 border-l border-white pl-1 text-[8px]">10s</div>
+                                </div>
+                                <div class="h-12 bg-pink-500/20 border border-pink-500/30 rounded-lg w-[400px] ml-40 flex items-center px-3 text-[10px] font-bold track-item">TEXT: WELCOME TO LOMBOK</div>
+                                <div class="h-12 bg-blue-600/30 border border-blue-500/50 rounded-lg w-[800px] ml-10 flex items-center px-3 text-[10px] font-bold track-item">VIDEO: Main_Broll_West_Lombok.mp4</div>
+                                <div class="h-10 bg-green-600/20 border border-green-500/30 rounded-lg w-[1200px] flex items-center px-3 text-[10px] font-bold italic track-item">AUDIO: Cinematic_Atmosphere.wav</div>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 <section id="design" class="page-entry">
-                    <div class="flex h-full gap-4">
+                    <div class="flex h-full gap-4 p-6">
                         <div class="w-16 glass rounded-2xl flex flex-col items-center py-6 gap-6 shrink-0">
-                            <button class="text-xl" title="Templates">🖼️</button>
-                            <button class="text-xl" title="Text">🅰️</button>
-                            <button class="text-xl" title="Elements">💠</button>
-                            <button class="text-xl" title="Upload">☁️</button>
+                            <button class="text-xl">🖼️</button>
+                            <button class="text-xl">🅰️</button>
+                            <button class="text-xl">💠</button>
                         </div>
                         <div class="flex-1 glass rounded-2xl canvas-bg flex items-center justify-center relative">
-                            <div id="artboard" class="w-[400px] h-[400px] bg-white shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center p-10 text-center text-black">
+                            <div id="artboard" class="w-[400px] h-[400px] bg-white shadow-2xl flex flex-col items-center justify-center p-10 text-center text-black transition-all">
                                 <h1 contenteditable="true" class="text-4xl font-black italic tracking-tighter uppercase outline-none">TRUELINE</h1>
                                 <div class="w-10 h-1 bg-pink-500 my-4"></div>
                                 <p contenteditable="true" class="text-xs font-bold uppercase tracking-widest text-gray-500 outline-none">Premium Culinary Service</p>
                             </div>
-                            <div class="absolute top-6 left-6 flex gap-2">
-                                <input type="color" oninput="document.getElementById('artboard').style.backgroundColor = this.value" class="w-8 h-8 rounded cursor-pointer">
-                                <select onchange="document.getElementById('artboard').style.borderRadius = this.value" class="text-[10px] font-bold">
-                                    <option value="0px">SQUARE</option>
-                                    <option value="50%">CIRCLE</option>
-                                    <option value="24px">ROUNDED</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
                 </section>
 
-                <section id="culinary" class="page-entry">
-                    <div class="grid grid-cols-3 gap-6">
-                        <div class="glass p-6 rounded-3xl border-yellow-500/20">
-                            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Today's Revenue</p>
-                            <h4 class="text-3xl font-black text-yellow-500">Rp 4.250.000</h4>
+                <section id="culinary" class="page-entry p-8 overflow-y-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="glass p-6 rounded-3xl border-yellow-500/20 bg-gradient-to-br from-yellow-500/5 to-transparent">
+                            <p class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-widest">Daily Revenue</p>
+                            <h4 class="text-4xl font-black text-yellow-500">Rp 4.250.000</h4>
                         </div>
-                        <div class="glass p-6 rounded-3xl">
-                            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Active Orders</p>
-                            <h4 class="text-3xl font-black">12</h4>
+                        <div class="glass p-6 rounded-3xl border-blue-500/20">
+                            <p class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-widest">Active Orders</p>
+                            <h4 class="text-4xl font-black">12</h4>
                         </div>
-                        <div class="glass p-6 rounded-3xl">
-                            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Total Reviews</p>
-                            <h4 class="text-3xl font-black italic">4.9/5.0</h4>
+                        <div class="glass p-6 rounded-3xl border-green-500/20">
+                            <p class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-widest">Customer Rating</p>
+                            <h4 class="text-4xl font-black italic">4.9/5.0</h4>
                         </div>
-                        <div class="col-span-3 glass rounded-3xl p-8">
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-xl font-bold italic">Menu Management (Lombok Barat)</h3>
-                                <button class="bg-blue-600 px-4 py-2 rounded-lg text-[10px] font-bold uppercase">+ Add Item</button>
+                    </div>
+                    
+                    <div class="glass rounded-3xl p-8">
+                        <div class="flex justify-between items-center mb-8">
+                            <div>
+                                <h3 class="text-xl font-black italic uppercase tracking-tighter">Menu Management</h3>
+                                <p class="text-xs text-gray-500">Lombok Barat Digital Hub</p>
                             </div>
-                            <table class="w-full text-left text-sm">
-                                <tr class="border-b border-white/5 text-gray-500 text-[10px] uppercase">
-                                    <th class="pb-4">Menu Name</th>
+                            <button class="bg-blue-600 px-6 py-2 rounded-xl text-[10px] font-bold uppercase shadow-lg shadow-blue-600/20">+ New Item</button>
+                        </div>
+                        <table class="w-full text-left">
+                            <thead class="text-[10px] text-gray-500 uppercase tracking-widest border-b border-white/5">
+                                <tr>
+                                    <th class="pb-4">Product Name</th>
                                     <th class="pb-4">Category</th>
                                     <th class="pb-4">Price</th>
-                                    <th class="pb-4">Status</th>
+                                    <th class="pb-4">Inventory</th>
                                     <th class="pb-4">Action</th>
                                 </tr>
-                                <tr class="border-b border-white/5">
-                                    <td class="py-4 font-bold italic">Ayam Taliwang Spesial</td>
-                                    <td class="py-4">Main Course</td>
-                                    <td class="py-4 text-yellow-500 font-bold">Rp 45.000</td>
-                                    <td class="py-4"><span class="bg-green-500/20 text-green-500 px-2 py-1 rounded text-[10px] font-bold">AVAILABLE</span></td>
-                                    <td class="py-4"><button class="text-gray-500 hover:text-white">Edit</button></td>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-white/5 hover:bg-white/[0.02] transition">
+                                    <td class="py-6 font-bold italic">Ayam Taliwang Spesial</td>
+                                    <td class="py-6"><span class="bg-blue-500/10 text-blue-400 px-2 py-1 rounded text-[10px]">MAIN COURSE</span></td>
+                                    <td class="py-6 text-yellow-500 font-bold">Rp 45.000</td>
+                                    <td class="py-6"><span class="text-green-500 font-bold">● Available</span></td>
+                                    <td class="py-6"><button class="opacity-30 hover:opacity-100">Edit</button></td>
                                 </tr>
-                            </table>
-                        </div>
+                                <tr class="border-b border-white/5 hover:bg-white/[0.02] transition">
+                                    <td class="py-6 font-bold italic">Pelecing Kangkung</td>
+                                    <td class="py-6"><span class="bg-green-500/10 text-green-400 px-2 py-1 rounded text-[10px]">SIDE DISH</span></td>
+                                    <td class="py-6 text-yellow-500 font-bold">Rp 15.000</td>
+                                    <td class="py-6"><span class="text-green-500 font-bold">● Available</span></td>
+                                    <td class="py-6"><button class="opacity-30 hover:opacity-100">Edit</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </section>
 
                 <section id="slides" class="page-entry flex items-center justify-center">
-                    <div class="text-center">
-                        <h3 class="text-5xl font-black italic mb-4">SMART SLIDES</h3>
-                        <p class="text-gray-500 uppercase tracking-widest text-sm">Integrasi data ke presentasi dalam 1-klik</p>
+                    <div class="text-center p-20 glass rounded-[40px] border-orange-500/20">
+                        <h3 class="text-6xl font-black italic mb-4 tracking-tighter">SMART <span class="text-orange-500">SLIDES</span></h3>
+                        <p class="text-gray-500 uppercase tracking-[0.4em] text-xs">Automated Pitch Deck Engine v2.0</p>
+                        <div class="mt-10 flex gap-4 justify-center">
+                            <div class="w-32 h-20 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center text-2xl">➕</div>
+                            <div class="w-32 h-20 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center text-xs opacity-40 italic">Coming Soon</div>
+                        </div>
                     </div>
                 </section>
 
-                <section id="founder" class="page-entry flex items-center justify-center">
-                    <div class="w-96 glass p-10 rounded-3xl text-center">
-                        <div class="w-20 h-20 bg-blue-600 mx-auto rounded-full mb-6 flex items-center justify-center text-3xl">🔑</div>
-                        <h3 class="text-xl font-black uppercase mb-6">Security Access</h3>
-                        <input type="password" placeholder="Founder Pin" class="w-full text-center mb-4">
-                        <button class="w-full bg-white text-black py-3 rounded-xl font-black uppercase text-xs">Unlock System</button>
+                <section id="founder" class="page-entry flex items-center justify-center bg-[#050505]">
+                    <div class="w-full max-w-md glass p-12 rounded-[40px] text-center border-red-500/20 shadow-2xl shadow-red-500/5">
+                        <div class="w-24 h-24 bg-gradient-to-t from-red-600 to-red-400 mx-auto rounded-3xl mb-8 flex items-center justify-center text-4xl shadow-lg shadow-red-600/20">🔒</div>
+                        <h3 class="text-2xl font-black uppercase mb-2 tracking-tighter">Founder Privileges</h3>
+                        <p class="text-gray-500 text-xs mb-8 uppercase tracking-widest">Authorization Required</p>
+                        <div class="space-y-4">
+                            <input type="password" placeholder="ENTER FOUNDER PIN" class="w-full py-4 text-center text-lg font-black tracking-[1em] bg-black border-white/10 rounded-2xl">
+                            <button class="w-full bg-white text-black py-4 rounded-2xl font-black uppercase text-xs hover:bg-red-600 hover:text-white transition-all shadow-xl">Unlock Core System</button>
+                        </div>
+                        <p class="mt-8 text-[10px] text-gray-600 uppercase font-bold tracking-widest">Encrypted by TRUELINE Security Protocol</p>
                     </div>
                 </section>
 
@@ -198,29 +302,37 @@
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             element.classList.add('active');
 
-            // 2. Switch Visibility
+            // 2. Switch Section Visibility
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
 
-            // 3. Update Header Meta
+            // 3. Dynamic Header Configuration
             const tag = document.getElementById('moduleTag');
             const modTitle = document.getElementById('currentModule');
             
             const config = {
-                video: { label: 'Video Suite', color: 'bg-blue-600/20', text: 'text-blue-500', title: 'Editing: Promo_Trueline_Lombok.mp4' },
-                design: { label: 'Graphic Hub', color: 'bg-pink-600/20', text: 'text-pink-500', title: 'Designing: Instagram_Post_Square' },
-                slides: { label: 'Presentation', color: 'bg-orange-600/20', text: 'text-orange-500', title: 'Pitch: Investor_Deck_2026' },
-                culinary: { label: 'Business Engine', color: 'bg-yellow-600/20', text: 'text-yellow-500', title: 'Managing: TRUELINE Lombok Barat' },
-                founder: { label: 'Root Control', color: 'bg-red-600/20', text: 'text-red-500', title: 'System Administrative Privileges' }
+                video: { label: 'Video Suite', color: 'bg-blue-600/20', text: 'text-blue-500', border: 'border-blue-500/20', title: 'Editing: Promo_Trueline_Lombok.mp4' },
+                design: { label: 'Graphic Hub', color: 'bg-pink-600/20', text: 'text-pink-500', border: 'border-pink-500/20', title: 'Designing: Branding_Identity_v1' },
+                slides: { label: 'Presentation', color: 'bg-orange-600/20', text: 'text-orange-500', border: 'border-orange-500/20', title: 'Pitch: Investor_Deck_2026' },
+                culinary: { label: 'Business Engine', color: 'bg-yellow-600/20', text: 'text-yellow-500', border: 'border-yellow-500/20', title: 'Managing: TRUELINE Lombok Barat' },
+                founder: { label: 'Root Control', color: 'bg-red-600/20', text: 'text-red-500', border: 'border-red-500/20', title: 'System Administrative Privileges' }
             };
 
             const c = config[pageId];
             if(c) {
                 tag.innerText = c.label;
-                tag.className = `${c.color} ${c.text} px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider`;
+                tag.className = `${c.color} ${c.text} ${c.border} px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border`;
                 modTitle.innerText = c.title;
             }
         }
+
+        // Timeline Scrubbing Simulation
+        document.querySelector('.timeline-track').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left + this.scrollLeft;
+            const playhead = document.querySelector('.playhead');
+            playhead.style.left = x + 'px';
+        });
     </script>
 </body>
 </html>
