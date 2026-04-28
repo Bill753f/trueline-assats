@@ -34,6 +34,11 @@
       cursor: move;
     }
 
+    img {
+      cursor: move;
+      position: absolute;
+    }
+
     #timeline {
       height: 100px;
       background: #222;
@@ -63,12 +68,11 @@
 </head>
 
 <body>
-  
-<h1>TRUELINE WORKING 🔥</h1>
-  
+
 <div id="sidebar">
-  <h3>Trueline</h3>
+  <h3>🎬 Trueline</h3>
   <button onclick="addText()">+ Text</button>
+  <button onclick="addImage()">+ Image</button>
   <button onclick="newSlide()">+ Slide</button>
   <button onclick="exportPPT()">⬇ Export PPT</button>
 </div>
@@ -87,14 +91,37 @@ function render() {
   canvas.innerHTML = "";
 
   slides[currentSlide].forEach((item, index) => {
+
+    // 🔥 HANDLE IMAGE
+    if (item.type === "image") {
+      const img = document.createElement("img");
+      img.src = item.src;
+      img.style.left = item.x + "px";
+      img.style.top = item.y + "px";
+      img.style.width = item.width + "px";
+
+      makeDraggable(img, index);
+      canvas.appendChild(img);
+      return;
+    }
+
+    // 🔥 TEXT
     const div = document.createElement("div");
     div.className = "text-box";
     div.innerText = item.text;
     div.style.left = item.x + "px";
     div.style.top = item.y + "px";
 
-    makeDraggable(div, index);
+    // ✏️ DOUBLE CLICK EDIT
+    div.ondblclick = () => {
+      const newText = prompt("Edit text:", item.text);
+      if (newText !== null) {
+        slides[currentSlide][index].text = newText;
+        render();
+      }
+    };
 
+    makeDraggable(div, index);
     canvas.appendChild(div);
   });
 
@@ -102,7 +129,22 @@ function render() {
 }
 
 function addText() {
-  slides[currentSlide].push({ text: "Edit me", x: 50, y: 50 });
+  slides[currentSlide].push({ text: "Double click to edit", x: 50, y: 50 });
+  render();
+}
+
+function addImage() {
+  const url = prompt("Masukkan URL gambar:");
+  if (!url) return;
+
+  slides[currentSlide].push({
+    type: "image",
+    src: url,
+    x: 50,
+    y: 50,
+    width: 120
+  });
+
   render();
 }
 
@@ -158,11 +200,20 @@ function exportPPT() {
     let slide = pptx.addSlide();
 
     slideData.forEach(item => {
-      slide.addText(item.text, {
-        x: item.x / 100,
-        y: item.y / 100,
-        fontSize: 18
-      });
+      if (item.type === "image") {
+        slide.addImage({
+          path: item.src,
+          x: item.x / 100,
+          y: item.y / 100,
+          w: 2
+        });
+      } else {
+        slide.addText(item.text, {
+          x: item.x / 100,
+          y: item.y / 100,
+          fontSize: 18
+        });
+      }
     });
   });
 
