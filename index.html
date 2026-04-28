@@ -46,8 +46,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/fireba
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
@@ -62,25 +61,28 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔥 LOGIN STATE
 let currentUser = null;
 const status = document.getElementById("status");
 
-// 🔥 AMBIL HASIL REDIRECT (INI KUNCI)
-getRedirectResult(auth)
-  .then((result) => {
-    if (result && result.user) {
-      currentUser = result.user;
-      status.innerText = "Login: " + result.user.email;
-      console.log("Redirect login sukses");
-    }
-  })
-  .catch((error) => {
-    console.error("Redirect error:", error);
-  });
+// 🔥 LOGIN POPUP FIX
+document.getElementById("loginBtn").onclick = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
 
-// 🔥 MONITOR LOGIN
+    currentUser = result.user;
+    status.innerText = "Login: " + result.user.email;
+
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Login gagal, cek console (F12)");
+  }
+};
+
+// 🔥 MONITOR LOGIN (backup)
 onAuthStateChanged(auth, (user) => {
+  console.log("AUTH:", user);
+
   if (user) {
     currentUser = user;
     status.innerText = "Login: " + user.email;
@@ -88,12 +90,6 @@ onAuthStateChanged(auth, (user) => {
     status.innerText = "Belum login";
   }
 });
-
-// LOGIN BUTTON
-document.getElementById("loginBtn").onclick = () => {
-  const provider = new GoogleAuthProvider();
-  signInWithRedirect(auth, provider);
-};
 
 // 🎬 EDITOR
 let slides = [[]];
