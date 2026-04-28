@@ -5,68 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Templates | TRUELINE Library</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; }
-        .template-card { background: #111; border-radius: 16px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255,255,255,0.05); }
-        .template-card:hover { transform: scale(1.03); border-color: #2563eb; box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.3); }
-        .category-btn { transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1); }
-        .category-btn.active { background: #2563eb; border-color: #2563eb; }
+        .template-card { background: #111; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .template-card:hover { border-color: #2563eb; transform: translateY(-5px); }
     </style>
 </head>
 <body class="pb-20">
-
-    <nav class="p-6 flex justify-between items-center sticky top-0 bg-[#050505]/90 backdrop-blur-xl z-50 border-b border-white/5">
-        <div onclick="window.location.href='index.html'" class="text-2xl font-black tracking-tighter text-blue-500 cursor-pointer">TRUELINE</div>
-        <button onclick="window.location.href='dashboard.html'" class="text-sm font-bold bg-white/5 hover:bg-white/10 px-5 py-2 rounded-full transition">Back to Dashboard</button>
+    <nav class="p-6 flex justify-between items-center border-b border-white/5">
+        <div onclick="window.location.href='index.html'" class="text-2xl font-black text-blue-500 cursor-pointer">TRUELINE</div>
+        <button onclick="window.location.href='dashboard.html'" class="text-sm font-bold bg-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition">Dashboard</button>
     </nav>
 
     <div class="max-w-7xl mx-auto px-6 pt-12">
-        <h1 class="text-4xl font-black mb-2">Template Library</h1>
-        <p class="text-gray-500 mb-10">Pilih basis kreasi untuk proyek riset atau kontenmu.</p>
-
-        <div class="flex space-x-3 mb-12 overflow-x-auto pb-4">
-            <button class="category-btn active px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest">All</button>
-            <button class="category-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white">Cinematic</button>
-            <button class="category-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white">Vertical</button>
-            <button class="category-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white">Research AI</button>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            
-            <div class="template-card group cursor-pointer">
-                <div class="aspect-[9/16] bg-gradient-to-br from-blue-900/40 to-black relative overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40 backdrop-blur-sm">
-                        <button class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm shadow-xl">Use Template</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-sm">Cinematic Orchestrator v1</h3>
-                    <p class="text-[11px] text-gray-500 mt-1 uppercase tracking-tight">4:5 • 15 Seconds</p>
-                </div>
+        <h1 class="text-4xl font-black mb-8">Template Library</h1>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="template-card aspect-[9/16] relative flex flex-col justify-end p-4">
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                <p class="relative text-sm font-bold">Cinematic Vlog</p>
+                <button onclick="window.location.href='dashboard.html'" class="relative mt-2 bg-blue-600 text-[10px] font-bold py-2 rounded">USE TEMPLATE</button>
             </div>
-
-            <div class="template-card group cursor-pointer">
-                <div class="aspect-[9/16] bg-gradient-to-br from-purple-900/40 to-black relative overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40 backdrop-blur-sm">
-                        <button class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm shadow-xl">Use Template</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-sm">Dynamic Flow Analytics</h3>
-                    <p class="text-[11px] text-gray-500 mt-1 uppercase tracking-tight">9:16 • 10 Seconds</p>
-                </div>
+            <div class="template-card aspect-[9/16] relative flex flex-col justify-end p-4 bg-blue-900/10">
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                <p class="relative text-sm font-bold">Dynamic Ads</p>
+                <button onclick="window.location.href='dashboard.html'" class="relative mt-2 bg-blue-600 text-[10px] font-bold py-2 rounded">USE TEMPLATE</button>
             </div>
-
-            <div class="template-card group cursor-pointer border-dashed border-2 border-white/5 bg-transparent shadow-none hover:border-blue-500/50">
-                <div class="aspect-[9/16] flex flex-col items-center justify-center text-gray-700">
-                    <span class="text-4xl mb-2">+</span>
-                    <span class="text-[10px] font-bold uppercase">Submit Your Own</span>
-                </div>
-            </div>
-
         </div>
     </div>
-
 </body>
 </html>
