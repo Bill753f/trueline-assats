@@ -2,35 +2,27 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Templates | TRUELINE Library</title>
+    <title>Templates | TRUELINE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; }
-        .template-card { background: #111; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
-        .template-card:hover { border-color: #2563eb; transform: translateY(-5px); }
+        body { background-color: #050505; color: white; }
+        .t-card { background: #111; border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: 0.3s; }
+        .t-card:hover { border-color: #2563eb; }
     </style>
 </head>
-<body class="pb-20">
-    <nav class="p-6 flex justify-between items-center border-b border-white/5">
-        <div onclick="window.location.href='index.html'" class="text-2xl font-black text-blue-500 cursor-pointer">TRUELINE</div>
-        <button onclick="window.location.href='dashboard.html'" class="text-sm font-bold bg-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition">Dashboard</button>
-    </nav>
-
-    <div class="max-w-7xl mx-auto px-6 pt-12">
-        <h1 class="text-4xl font-black mb-8">Template Library</h1>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div class="template-card aspect-[9/16] relative flex flex-col justify-end p-4">
-                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-                <p class="relative text-sm font-bold">Cinematic Vlog</p>
-                <button onclick="window.location.href='dashboard.html'" class="relative mt-2 bg-blue-600 text-[10px] font-bold py-2 rounded">USE TEMPLATE</button>
-            </div>
-            <div class="template-card aspect-[9/16] relative flex flex-col justify-end p-4 bg-blue-900/10">
-                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-                <p class="relative text-sm font-bold">Dynamic Ads</p>
-                <button onclick="window.location.href='dashboard.html'" class="relative mt-2 bg-blue-600 text-[10px] font-bold py-2 rounded">USE TEMPLATE</button>
-            </div>
-        </div>
+<body class="p-8">
+    <div class="flex justify-between items-center mb-12">
+        <h1 class="text-3xl font-black italic">TRUELINE <span class="text-blue-500">LIB</span></h1>
+        <button onclick="window.location.href='index.html'" class="text-gray-500 text-sm">Close</button>
     </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div class="t-card aspect-[9/16] relative flex flex-col justify-end p-4">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+            <p class="relative text-[10px] font-bold text-blue-400">#Trending</p>
+            <p class="relative text-xs font-bold truncate">Cinematic Flow</p>
+            <button onclick="window.location.href='dashboard.html'" class="relative mt-2 bg-white text-black py-2 rounded text-[10px] font-black uppercase">Use</button>
+        </div>
+        </div>
 </body>
 </html>
